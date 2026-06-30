@@ -1,0 +1,7 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Products" [level=1] [ref=e6]
+      - generic [ref=e7]: Catalog
+  - main [ref=e8]:
+    - generic "Loading products" [ref=e9]
