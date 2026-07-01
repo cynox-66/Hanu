@@ -29,5 +29,4 @@ export interface OrderRepository {
   /**
    * Hard deletes an order. (Used only in exceptional cases).
    */
-  delete(id: string): Promise<void>;
 }

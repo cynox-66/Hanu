@@ -137,7 +137,7 @@ Search functionality must be handled strictly in-memory over pre-fetched data to
 
 ## 13. Archive Rules
 
-- **Archive instead of Delete.** True data deletion is strictly forbidden to prevent accidental data loss.
+- **Archive instead of Delete.** True data deletion is strictly forbidden to prevent accidental data loss. The `delete()` method has been structurally removed from all Repositories.
 - **Archived records invisible by default.** Lists and searches must exclude archived entities automatically.
 - **Editing archived entities prohibited.** The Edit page must treat an archived entity as "Not Found" or explicitly block modification.
 
@@ -170,11 +170,11 @@ Orders record point-in-time snapshots of related entities at the moment of creat
 
 ### Snapshotted Fields
 
-| Field          | Source Entity | Purpose                                              |
-| -------------- | ------------- | ---------------------------------------------------- |
-| `customerName` | Customer      | Preserves the customer's name at time of order        |
-| `productName`  | Product       | Preserves the product's name at time of order         |
-| `unitPrice`    | Product       | Preserves the selling price at time of order          |
+| Field          | Source Entity | Purpose                                        |
+| -------------- | ------------- | ---------------------------------------------- |
+| `customerName` | Customer      | Preserves the customer's name at time of order |
+| `productName`  | Product       | Preserves the product's name at time of order  |
+| `unitPrice`    | Product       | Preserves the selling price at time of order   |
 
 ### Rules
 
@@ -214,15 +214,15 @@ The Domain layer is the single owner of entity lifecycle invariants.
 
 ### What the Domain Owns
 
-| Invariant       | Owner                           |
-| --------------- | ------------------------------- |
-| `id`            | `createOrderFromDTO()` Factory  |
-| `createdAt`     | `createOrderFromDTO()` Factory  |
-| `updatedAt`     | `updateOrder()` Factory         |
-| `totalAmount`   | `createOrderFromDTO()` Factory  |
-| Immutable fields| `updateOrder()` Factory         |
+| Invariant        | Owner                          |
+| ---------------- | ------------------------------ |
+| `id`             | `createXFromDTO()` Factory     |
+| `createdAt`      | `createXFromDTO()` Factory     |
+| `updatedAt`      | `updateX()` Factory            |
+| `totalAmount`    | `createOrderFromDTO()` Factory |
+| Immutable fields | `updateX()` Factory            |
 
-### What React Must Never Do
+### What React & Application Layer Must Never Do
 
 - Generate UUIDs
 - Generate timestamps
@@ -232,7 +232,7 @@ The Domain layer is the single owner of entity lifecycle invariants.
 
 ### Enforcement
 
-This is enforced structurally: the `CreateOrderDTO` type explicitly omits `id`, `createdAt`, `updatedAt`, and `totalAmount`. TypeScript prevents the Presentation layer from even passing these values.
+This is enforced structurally: the `CreateXDTO` type explicitly omits `id`, `createdAt`, and `updatedAt`. TypeScript prevents the Presentation layer from even passing these values. The Domain Factory enforces them before passing the assembled entity to the repository.
 
 ## 19. Search Standard
 
@@ -253,3 +253,12 @@ All search functionality in Hanu follows a strict in-memory, offline-first patte
 - In-memory filtering is instant and deterministic.
 - This pattern guarantees consistent search performance regardless of connectivity.
 
+## 20. Error Boundaries
+
+The application uses a single, root-level `<AppErrorBoundary>` to catch unhandled render errors and prevent the entire application from unmounting into a white screen.
+
+### Rules
+
+- **No external libraries:** Error boundaries are implemented using raw React classes.
+- **No business logic:** The error boundary only provides a recovery UI (retry/return to dashboard). It does not log to external services or attempt to fix state.
+- **Global scope:** Placed outside the context providers in `main.tsx` to catch errors inside the providers as well as the routing tree.

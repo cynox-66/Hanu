@@ -11,9 +11,9 @@ import { OrderItemRow } from './OrderItemRow';
 
 export const OrderBuilder: React.FC = () => {
   const navigate = useNavigate();
-  const { customers } = useCustomers();
-  const { products } = useProducts();
-  const { createOrder, isSaving } = useCreateOrder();
+  const { customers, isLoading: customersLoading, error: customersError } = useCustomers();
+  const { products, isLoading: productsLoading, error: productsError } = useProducts();
+  const { createOrder, isSaving, error: createError } = useCreateOrder();
 
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
   const [selectedCustomerName, setSelectedCustomerName] = useState<string>('');
@@ -94,20 +94,51 @@ export const OrderBuilder: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-6 pb-24">
+      {/* Mutation error — shown above content so user sees it without scrolling */}
+      {createError && (
+        <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
+          <p className="text-sm font-medium text-red-800">
+            Failed to create order. Please try again.
+          </p>
+        </div>
+      )}
+
       {/* Customer Selection */}
       <section className="bg-white p-4 rounded-2xl shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Customer</h2>
-        <CustomerSelector
-          customers={activeCustomers}
-          selectedCustomer={selectedCustomerId}
-          onSelect={handleSelectCustomer}
-        />
+        {customersLoading ? (
+          <div className="flex items-center gap-2 py-2 text-sm text-gray-400">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-gray-200 border-t-gray-500" />
+            Loading customers…
+          </div>
+        ) : customersError ? (
+          <p className="text-sm text-red-600 py-2">
+            Could not load customers. Please go back and try again.
+          </p>
+        ) : (
+          <CustomerSelector
+            customers={activeCustomers}
+            selectedCustomer={selectedCustomerId}
+            onSelect={handleSelectCustomer}
+          />
+        )}
       </section>
 
       {/* Product Selection */}
       <section className="bg-white p-4 rounded-2xl shadow-sm">
         <h2 className="text-lg font-bold text-gray-900 mb-4">Add Products</h2>
-        <ProductSelector products={activeProducts} onAdd={handleAddProduct} />
+        {productsLoading ? (
+          <div className="flex items-center gap-2 py-2 text-sm text-gray-400">
+            <span className="h-4 w-4 animate-spin rounded-full border-2 border-gray-200 border-t-gray-500" />
+            Loading products…
+          </div>
+        ) : productsError ? (
+          <p className="text-sm text-red-600 py-2">
+            Could not load products. Please go back and try again.
+          </p>
+        ) : (
+          <ProductSelector products={activeProducts} onAdd={handleAddProduct} />
+        )}
       </section>
 
       {/* Order Items */}

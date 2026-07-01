@@ -29,5 +29,4 @@ export interface ProductRepository {
   /**
    * Hard deletes a product. (Used only in exceptional cases).
    */
-  delete(id: string): Promise<void>;
 }

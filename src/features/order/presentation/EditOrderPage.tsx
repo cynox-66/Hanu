@@ -22,9 +22,6 @@ export const EditOrderPage: React.FC = () => {
   const handleSave = async () => {
     if (!order) return;
     const updates: UpdateOrderDTO = {
-      customerId: order.customerId,
-      customerName: order.customerName,
-      items: order.items,
       status,
       notes: notes || undefined,
     };

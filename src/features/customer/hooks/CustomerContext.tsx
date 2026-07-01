@@ -5,7 +5,6 @@ import { GetCustomerById } from '../application/GetCustomerById';
 import { CreateCustomer } from '../application/CreateCustomer';
 import { EditCustomer } from '../application/EditCustomer';
 import { ArchiveCustomer } from '../application/ArchiveCustomer';
-import { DeleteCustomer } from '../application/DeleteCustomer';
 
 interface CustomerUseCases {
   getCustomers: GetCustomers;
@@ -13,7 +12,6 @@ interface CustomerUseCases {
   createCustomer: CreateCustomer;
   editCustomer: EditCustomer;
   archiveCustomer: ArchiveCustomer;
-  deleteCustomer: DeleteCustomer;
 }
 
 const CustomerContext = createContext<CustomerUseCases | null>(null);
@@ -31,7 +29,6 @@ export const CustomerProvider: React.FC<CustomerProviderProps> = ({ repository, 
       createCustomer: new CreateCustomer(repository),
       editCustomer: new EditCustomer(repository),
       archiveCustomer: new ArchiveCustomer(repository),
-      deleteCustomer: new DeleteCustomer(repository),
     };
   }, [repository]);
 

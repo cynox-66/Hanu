@@ -4,18 +4,6 @@
 
 ---
 
-## TD-001: Narrow UpdateOrderDTO
-
-**Severity:** Low
-**Module:** Order
-**Sprint Introduced:** 3
-
-The `UpdateOrderDTO` currently mirrors `CreateOrderDTO` (minus domain-generated fields). The `updateOrder()` factory ignores most of these fields anyway (customer, items, totalAmount are preserved from the existing order). A narrower DTO containing only `{ status, notes }` would be more honest, but this was deferred to avoid a mid-sprint type refactor.
-
-**Resolution:** Narrow the DTO to `Pick<Order, 'status' | 'notes'>` when EditOrder stabilizes and no other consumers exist.
-
----
-
 ## TD-002: Inventory Deduction on Order Creation
 
 **Severity:** Medium
@@ -85,39 +73,3 @@ All mutation hooks (create, edit, archive) wait for the persistence operation to
 Hanu is offline-first for reads (IndexedDB via Dexie), but has no synchronization engine for uploading local changes to a remote server (Supabase). All data currently lives exclusively in the browser's IndexedDB.
 
 **Resolution:** Implement a sync queue in Infrastructure that tracks local mutations and replays them to Supabase when connectivity is available. This is the highest-priority infrastructure debt.
-
----
-
-## TD-008: Delete Use Case Performs Hard Delete
-
-**Severity:** Medium
-**Module:** All
-**Sprint Introduced:** 2
-
-The `DeleteProduct`, `DeleteCustomer`, and `DeleteOrder` use cases perform hard deletes via `repository.delete(id)`. The Engineering Standard (§13) states destructive deletes are prohibited — archive should be used instead. The Delete use cases exist but should be restricted to admin/debug contexts or removed entirely.
-
-**Resolution:** Evaluate whether hard delete is ever needed. If not, remove the Delete use cases and rely exclusively on Archive. If needed, gate Delete behind a confirmation + admin check.
-
----
-
-## TD-009: No Error Boundary
-
-**Severity:** Medium
-**Module:** App Shell
-**Sprint Introduced:** 2
-
-The application has no React Error Boundary. An unhandled error in any module will crash the entire app.
-
-**Resolution:** Introduce a top-level `<ErrorBoundary>` component in the App Shell that catches render errors and displays a recovery UI.
-
----
-
-## TD-010: No Loading State for Cross-Module Data in OrderBuilder
-
-**Severity:** Low
-**Module:** Order
-**Sprint Introduced:** 3
-
-The `OrderBuilder` uses `useCustomers()` and `useProducts()` to populate selectors but does not display loading states for those hooks. If the customer or product lists are still loading, the dropdowns appear empty.
-
-**Resolution:** Add loading indicators to the Customer and Product selector sections while their respective hooks are fetching data.

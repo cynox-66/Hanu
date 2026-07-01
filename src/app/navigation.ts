@@ -35,7 +35,7 @@ export const navigation: NavItem[] = [
     label: 'Orders',
     icon: '📄',
     href: '/orders',
-    enabled: false,
+    enabled: true,
     description: 'Track your orders',
   },
   {

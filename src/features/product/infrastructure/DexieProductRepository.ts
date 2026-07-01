@@ -19,8 +19,4 @@ export class DexieProductRepository implements ProductRepository {
   async archive(id: string): Promise<void> {
     await db.products.update(id, { status: 'archived' });
   }
-
-  async delete(id: string): Promise<void> {
-    await db.products.delete(id);
-  }
 }

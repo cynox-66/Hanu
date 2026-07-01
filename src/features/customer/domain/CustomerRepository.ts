@@ -29,5 +29,4 @@ export interface CustomerRepository {
   /**
    * Hard deletes a customer. (Used only in exceptional cases).
    */
-  delete(id: string): Promise<void>;
 }

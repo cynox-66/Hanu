@@ -4,5 +4,4 @@ export * from './useCustomer';
 export * from './useCreateCustomer';
 export * from './useEditCustomer';
 export * from './useArchiveCustomer';
-export * from './useDeleteCustomer';
 export * from './useCustomerSearch';

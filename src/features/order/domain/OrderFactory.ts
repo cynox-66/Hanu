@@ -24,11 +24,13 @@ export function createOrderFromDTO(dto: CreateOrderDTO): Order {
  *
  * Enforces immutability of historical snapshots:
  *   - id, createdAt, customerId, customerName, items, and totalAmount
- *     are always preserved from the existing Order and can never be
- *     overwritten by an update operation.
+ *     are always preserved from the existing Order.
  *
  * Only editable fields (status, notes) from UpdateOrderDTO are applied.
  * updatedAt is generated here — never in the Application layer.
+ *
+ * The narrow UpdateOrderDTO structurally prevents callers from even passing
+ * historical fields — immutability is enforced at the type level, not just runtime.
  */
 export function updateOrder(existingOrder: Order, updates: UpdateOrderDTO): Order {
   return {
@@ -39,7 +41,7 @@ export function updateOrder(existingOrder: Order, updates: UpdateOrderDTO): Orde
     customerName: existingOrder.customerName,
     items: existingOrder.items,
     totalAmount: existingOrder.totalAmount,
-    // Editable fields from DTO
+    // Editable fields from narrow DTO
     status: updates.status,
     notes: updates.notes,
     // Domain-generated timestamp

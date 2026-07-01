@@ -6,6 +6,7 @@ import { navigation } from './navigation';
 const QUICK_ACTIONS = [
   { icon: '📦', label: '+ Product', href: '/products/new', id: 'dashboard-add-product' },
   { icon: '👥', label: '+ Customer', href: '/customers/new', id: 'dashboard-add-customer' },
+  { icon: '📄', label: '+ Order', href: '/orders/new', id: 'dashboard-add-order' },
 ];
 
 export const DashboardPage: React.FC = () => {

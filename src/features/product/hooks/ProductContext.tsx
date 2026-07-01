@@ -5,7 +5,6 @@ import { GetProductById } from '../application/GetProductById';
 import { CreateProduct } from '../application/CreateProduct';
 import { EditProduct } from '../application/EditProduct';
 import { ArchiveProduct } from '../application/ArchiveProduct';
-import { DeleteProduct } from '../application/DeleteProduct';
 
 interface ProductUseCases {
   getProducts: GetProducts;
@@ -13,7 +12,6 @@ interface ProductUseCases {
   createProduct: CreateProduct;
   editProduct: EditProduct;
   archiveProduct: ArchiveProduct;
-  deleteProduct: DeleteProduct;
 }
 
 const ProductContext = createContext<ProductUseCases | null>(null);
@@ -31,7 +29,6 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ repository, ch
       createProduct: new CreateProduct(repository),
       editProduct: new EditProduct(repository),
       archiveProduct: new ArchiveProduct(repository),
-      deleteProduct: new DeleteProduct(repository),
     };
   }, [repository]);
 

@@ -19,8 +19,4 @@ export class DexieCustomerRepository implements CustomerRepository {
   async archive(id: string): Promise<void> {
     await db.customers.update(id, { status: 'archived' });
   }
-
-  async delete(id: string): Promise<void> {
-    await db.customers.delete(id);
-  }
 }

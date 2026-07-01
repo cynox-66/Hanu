@@ -35,7 +35,10 @@ export type CreateOrderDTO = Omit<Order, 'id' | 'createdAt' | 'updatedAt' | 'tot
 
 /**
  * DTO for updating an existing Order.
- * Consumed exclusively by the EditOrder use case.
- * Kept as a distinct semantic type so future fields can diverge from CreateOrderDTO.
+ * Consumed exclusively by the EditOrder use case and updateOrder Domain function.
+ *
+ * Intentionally narrow: only `status` and `notes` are editable post-creation.
+ * All historical data (customerId, customerName, items, totalAmount) is immutable
+ * and enforced by the Domain Factory — this DTO structurally prevents passing them.
  */
-export type UpdateOrderDTO = Omit<Order, 'id' | 'createdAt' | 'updatedAt' | 'totalAmount'>;
+export type UpdateOrderDTO = Pick<Order, 'status' | 'notes'>;

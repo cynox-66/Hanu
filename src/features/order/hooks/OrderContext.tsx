@@ -5,7 +5,6 @@ import { GetOrderById } from '../application/GetOrderById';
 import { CreateOrder } from '../application/CreateOrder';
 import { EditOrder } from '../application/EditOrder';
 import { ArchiveOrder } from '../application/ArchiveOrder';
-import { DeleteOrder } from '../application/DeleteOrder';
 
 interface OrderUseCases {
   getOrders: GetOrders;
@@ -13,7 +12,6 @@ interface OrderUseCases {
   createOrder: CreateOrder;
   editOrder: EditOrder;
   archiveOrder: ArchiveOrder;
-  deleteOrder: DeleteOrder;
 }
 
 const OrderContext = createContext<OrderUseCases | null>(null);
@@ -31,7 +29,6 @@ export const OrderProvider: React.FC<OrderProviderProps> = ({ repository, childr
       createOrder: new CreateOrder(repository),
       editOrder: new EditOrder(repository),
       archiveOrder: new ArchiveOrder(repository),
-      deleteOrder: new DeleteOrder(repository),
     };
   }, [repository]);
 

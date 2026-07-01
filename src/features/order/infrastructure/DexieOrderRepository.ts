@@ -19,8 +19,4 @@ export class DexieOrderRepository implements OrderRepository {
   async archive(id: string): Promise<void> {
     await db.orders.update(id, { status: 'archived' });
   }
-
-  async delete(id: string): Promise<void> {
-    await db.orders.delete(id);
-  }
 }
