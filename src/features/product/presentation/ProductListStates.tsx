@@ -3,10 +3,7 @@ import React from 'react';
 export const ProductListSkeleton: React.FC = () => (
   <div className="flex flex-col gap-3" aria-busy="true" aria-label="Loading products">
     {[1, 2, 3, 4].map((i) => (
-      <div
-        key={i}
-        className="flex items-center gap-4 rounded-2xl bg-white px-4 py-4 shadow-sm"
-      >
+      <div key={i} className="flex items-center gap-4 rounded-2xl bg-white px-4 py-4 shadow-sm">
         <div className="h-16 w-16 shrink-0 rounded-xl bg-gray-100 animate-pulse" />
         <div className="flex flex-1 flex-col gap-2">
           <div className="h-4 w-3/4 rounded bg-gray-100 animate-pulse" />
@@ -66,7 +63,7 @@ export const ProductListError: React.FC<{ onRetry: () => void }> = ({ onRetry })
         />
       </svg>
     </div>
-    <h2 className="text-lg font-semibold text-gray-900">Couldn't load products</h2>
+    <h2 className="text-lg font-semibold text-gray-900">Couldn&apos;t load products</h2>
     <p className="mt-2 text-sm text-gray-500 max-w-xs">
       Your data is safe. Check your storage and try again.
     </p>
@@ -80,7 +77,10 @@ export const ProductListError: React.FC<{ onRetry: () => void }> = ({ onRetry })
   </div>
 );
 
-export const ProductListNoSearchResults: React.FC<{ searchQuery: string; onClear: () => void }> = ({ searchQuery, onClear }) => (
+export const ProductListNoSearchResults: React.FC<{ searchQuery: string; onClear: () => void }> = ({
+  searchQuery,
+  onClear,
+}) => (
   <div className="flex flex-col items-center justify-center px-6 py-20 text-center">
     <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
       <svg
@@ -101,7 +101,7 @@ export const ProductListNoSearchResults: React.FC<{ searchQuery: string; onClear
     </div>
     <h2 className="text-lg font-semibold text-gray-900">No matching products</h2>
     <p className="mt-2 text-sm text-gray-500 max-w-xs">
-      We couldn't find any products matching "{searchQuery}".
+      We couldn&apos;t find any products matching &quot;{searchQuery}&quot;.
     </p>
     <button
       onClick={onClear}

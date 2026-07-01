@@ -8,10 +8,11 @@ description: Specialized review of React-specific implementation quality — com
 A read-only review skill scoped exclusively to React engineering quality. Baseline standards live in `.agents/rules/react-components.md` (always applied while writing React) — this skill is the deeper audit pass on top of that baseline, for when a component or hook needs a dedicated review. It does not write or edit code.
 
 This is one of several review skills with overlapping surface area — the boundary matters:
+
 - **`code-review`** covers general correctness, TypeScript, naming, duplication across any code, React or not.
 - **`ui-review`** covers usability for the business owner — touch targets, thumb zone, readability, navigation.
 - **`architecture-review`** covers layer boundaries and whether business logic leaked into the wrong place.
-- **`react-review`** (this skill) covers whether the *React itself* — component shape, hooks, state, rendering — is well engineered.
+- **`react-review`** (this skill) covers whether the _React itself_ — component shape, hooks, state, rendering — is well engineered.
 
 A single PR may warrant several of these; `dispatcher` decides which. This skill stays in its lane even when it notices something outside it — note it briefly and point to the right skill rather than reviewing it here.
 
@@ -22,6 +23,7 @@ A single PR may warrant several of these; `dispatcher` decides which. This skill
 **State ownership** — for each piece of state, does it belong in local component state, a custom hook, or a shared store? Flag duplicated state (the same fact tracked in two places) and derived state that's stored rather than computed (e.g. a count kept in `useState` when `items.length` would do).
 
 **Hooks** — review every `useState`, `useEffect`, `useMemo`, `useCallback`, and `useRef` for:
+
 - effects that don't need to exist (the logic could run in an event handler instead)
 - missing cleanup (subscriptions, timers, listeners)
 - stale closures (captured values that go out of date)
@@ -45,7 +47,7 @@ Apply current React best practices — derive state during render where possible
 3. Classify each issue:
    - **Critical** — incorrect behavior risk: stale closures, missing cleanup, broken dependency arrays, business logic inside a component, state duplication that can desync.
    - **Important** — real quality problem, not behavior-breaking: unnecessary effects, poor state placement, components doing too much, weak naming.
-   - **Suggested** — would improve the code but is optional: a possible extraction, a memoization that *might* help if proven necessary, a readability tweak.
+   - **Suggested** — would improve the code but is optional: a possible extraction, a memoization that _might_ help if proven necessary, a readability tweak.
 4. For anything outside this skill's scope (offline behavior, database calls, dependency choices, visual design, test coverage), note it in one line and name the skill that owns it — don't review it here.
 
 ## Output format

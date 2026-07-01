@@ -25,11 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onArchive }) 
       {/* Image / placeholder */}
       <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-gray-100 flex items-center justify-center">
         {hasImage ? (
-          <img
-            src={product.images[0]}
-            alt={product.name}
-            className="h-full w-full object-cover"
-          />
+          <img src={product.images[0]} alt={product.name} className="h-full w-full object-cover" />
         ) : (
           <svg
             className="h-8 w-8 text-gray-300"
@@ -52,9 +48,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onArchive }) 
       {/* Info */}
       <div className="flex flex-1 flex-col gap-1 min-w-0">
         <p className="truncate text-base font-semibold text-gray-900">{product.name}</p>
-        {product.category && (
-          <p className="truncate text-sm text-gray-500">{product.category}</p>
-        )}
+        {product.category && <p className="truncate text-sm text-gray-500">{product.category}</p>}
       </div>
 
       {/* Price + Status + Action */}
@@ -70,7 +64,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onArchive }) 
             aria-label={`Archive ${product.name}`}
           >
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+              />
             </svg>
           </button>
         ) : (

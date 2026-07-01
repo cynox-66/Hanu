@@ -25,7 +25,7 @@ Do not mix these responsibilities.
 3. [Core Principles](#3-core-principles)
 4. [Engineering Philosophy](#4-engineering-philosophy)
 5. [Architecture](#5-architecture)
-6. [Development Workflow](#6-development-workflow) — *procedural detail moved to `ENGINEERING_PLAYBOOK.md`*
+6. [Development Workflow](#6-development-workflow) — _procedural detail moved to `ENGINEERING_PLAYBOOK.md`_
 7. [Coding Standards](#7-coding-standards)
 8. [UX & Design Principles](#8-ux--design-principles)
 9. [Mobile-First Principles](#9-mobile-first-principles)
@@ -92,12 +92,12 @@ None of this creates value. It consumes time, creates stress, and increases the 
 
 Success is measured by manual effort removed, not feature count:
 
-| Before Hanu | After Hanu |
-|---|---|
-| "Where did I save that product photo?" | Open product. |
-| "Which customer ordered this?" | Open order. |
-| "Did this payment arrive?" | Payment status is immediately visible. |
-| "I forgot to send this parcel." | Shipment appears automatically in today's pending tasks. |
+| Before Hanu                            | After Hanu                                               |
+| -------------------------------------- | -------------------------------------------------------- |
+| "Where did I save that product photo?" | Open product.                                            |
+| "Which customer ordered this?"         | Open order.                                              |
+| "Did this payment arrive?"             | Payment status is immediately visible.                   |
+| "I forgot to send this parcel."        | Shipment appears automatically in today's pending tasks. |
 
 ## Design Goal
 
@@ -168,11 +168,11 @@ Hanu embraces these realities instead of forcing entirely new workflows on the o
 
 ## Build Around Actions, Not Entities
 
-Business owners think in terms of work, not databases. They wake up thinking *"I need to pack three parcels,"* not *"I need to update three Order entities."* They think *"I need to post today's arrivals,"* not *"I need Product Management."* The software should always present work — never implementation.
+Business owners think in terms of work, not databases. They wake up thinking _"I need to pack three parcels,"_ not _"I need to update three Order entities."_ They think _"I need to post today's arrivals,"_ not _"I need Product Management."_ The software should always present work — never implementation.
 
 ## Invisible Software
 
-The greatest compliment Hanu can receive is: *"I forgot I was using the app."* The interface should become instinctive, navigation should become automatic, and actions should become muscle memory. The owner should spend time running the business, not learning software.
+The greatest compliment Hanu can receive is: _"I forgot I was using the app."_ The interface should become instinctive, navigation should become automatic, and actions should become muscle memory. The owner should spend time running the business, not learning software.
 
 ## Calm Technology
 
@@ -213,7 +213,7 @@ Version 1 helps the owner organize. Version 2 helps the owner operate. Version 3
 > Principles are permanent. Features are temporary. When uncertainty exists, these principles take precedence over opinions, preferences, or implementation convenience.
 
 **1. Solve Problems, Not Requirements**
-Users don't ask for features — they describe frustrations. Engineering exists to solve the underlying problem, not blindly implement requested functionality. Before writing code, always ask: *what problem is this actually solving?* If unclear, implementation should not begin.
+Users don't ask for features — they describe frustrations. Engineering exists to solve the underlying problem, not blindly implement requested functionality. Before writing code, always ask: _what problem is this actually solving?_ If unclear, implementation should not begin.
 
 **2. Simplicity Wins**
 Simple software scales; complex software accumulates debt. When two solutions satisfy the same requirement, choose the simpler one — fewer concepts, fewer screens, fewer clicks, fewer settings, fewer dependencies, fewer abstractions, fewer surprises. Every unnecessary line of code is future maintenance.
@@ -282,7 +282,7 @@ The objective of engineering at Hanu is not to produce code — it's to build co
 
 ## Think Like an Engineer, Not a Programmer
 
-Programmers ask *"how do I build this?"* Engineers ask:
+Programmers ask _"how do I build this?"_ Engineers ask:
 
 - Should this exist?
 - Is this the right solution?
@@ -309,13 +309,13 @@ Abstractions reduce complexity; bad abstractions hide it. Never introduce one be
 
 1. First implementation.
 2. Second implementation.
-3. Third implementation → *now* consider abstracting.
+3. Third implementation → _now_ consider abstracting.
 
 Premature abstraction is technical debt.
 
 ## Prefer Deleting Code
 
-The safest code is code that doesn't exist. Every line introduces maintenance, bugs, cognitive load, and testing/documentation requirements. Deleting 100 unnecessary lines is often a greater engineering achievement than writing 100 new ones. Ask frequently: *can this feature exist with less code?*
+The safest code is code that doesn't exist. Every line introduces maintenance, bugs, cognitive load, and testing/documentation requirements. Deleting 100 unnecessary lines is often a greater engineering achievement than writing 100 new ones. Ask frequently: _can this feature exist with less code?_
 
 ## Design Before Implementation
 
@@ -417,7 +417,7 @@ External Services
 
 **Domain Layer** — the heart of Hanu. Responsible for business rules, calculations, validation, business invariants, entities, and value objects. This layer should know nothing about React, Supabase, IndexedDB, browsers, APIs, or UI. Business logic must remain portable.
 
-**Persistence Layer** — responsible for the local database, repositories, storage, and serialization. It answers only one question: *how is data stored?* It never decides why, when, or who requested a change.
+**Persistence Layer** — responsible for the local database, repositories, storage, and serialization. It answers only one question: _how is data stored?_ It never decides why, when, or who requested a change.
 
 **Synchronization Layer** — responsible for uploading, downloading, conflict handling, retries, and queue management. Synchronization is an infrastructure concern; business logic must keep functioning without it.
 
@@ -510,7 +510,7 @@ TypeScript is a design tool, not merely a compiler.
 **Forbidden** without a documented, justified reason:
 
 ```ts
-any
+any;
 ```
 
 Also avoid `@ts-ignore`, unsafe casting, unnecessary non-null assertions (`!`), and weakly typed APIs. Types should eliminate uncertainty.
@@ -522,21 +522,21 @@ Names should describe intent.
 Prefer:
 
 ```ts
-calculateOrderTotal()
-createProduct()
-syncPendingOrders()
+calculateOrderTotal();
+createProduct();
+syncPendingOrders();
 ```
 
 Avoid:
 
 ```ts
-calculate()
-helper()
-process()
-temp()
-data()
-value()
-obj()
+calculate();
+helper();
+process();
+temp();
+data();
+value();
+obj();
 ```
 
 A good name reduces the need for comments.
@@ -556,14 +556,14 @@ validateCustomer()
 instead of:
 
 ```ts
-handleEverything()
+handleEverything();
 ```
 
 Small functions are preferred; long functions require justification. If scrolling is required to understand a function, consider decomposing it.
 
 ## Components
 
-React components should focus on presentation, remain small, receive data via props, and delegate logic to hooks or services. Components should answer *"what should be displayed?"* — never *"how does the business work?"*
+React components should focus on presentation, remain small, receive data via props, and delegate logic to hooks or services. Components should answer _"what should be displayed?"_ — never _"how does the business work?"_
 
 ## Custom Hooks
 
@@ -613,13 +613,13 @@ Small focused files are easier to maintain.
 
 ## Comments
 
-Code should explain *how*. Comments should explain *why*.
+Code should explain _how_. Comments should explain _why_.
 
 Avoid:
 
 ```ts
 // Increment i
-i++
+i++;
 ```
 
 Prefer:
@@ -627,7 +627,7 @@ Prefer:
 ```ts
 // Inventory is reduced immediately so offline mode
 // reflects accurate stock before synchronization.
-inventory.quantity--
+inventory.quantity--;
 ```
 
 If code requires extensive comments, consider simplifying the implementation.
@@ -659,7 +659,7 @@ if (status === 7)
 Prefer:
 
 ```ts
-OrderStatus.Delivered
+OrderStatus.Delivered;
 ```
 
 Meaning is more valuable than brevity. Configuration — colors, routes, limits, storage keys, animation durations, business rules — belongs in constants, not duplicated literals. One source of truth.
@@ -900,7 +900,7 @@ Gestures should enhance workflows, never replace essential functionality. Every 
 
 ## Offline Confidence
 
-Users should confidently continue working even when they lose connectivity. The application should communicate *"your work is safe,"* not *"connection lost."* Confidence is more valuable than technical detail.
+Users should confidently continue working even when they lose connectivity. The application should communicate _"your work is safe,"_ not _"connection lost."_ Confidence is more valuable than technical detail.
 
 ## Orientation
 
@@ -939,7 +939,7 @@ The business should never stop because the internet stopped. The owner may be at
 
 ## Offline Is the Default
 
-When designing any feature, assume **no internet**, not stable internet. The question is never *"how does this work offline?"* — it is **"how does this synchronize once connectivity returns?"** This shift fundamentally changes the architecture.
+When designing any feature, assume **no internet**, not stable internet. The question is never _"how does this work offline?"_ — it is **"how does this synchronize once connectivity returns?"** This shift fundamentally changes the architecture.
 
 ## Local-First Data Flow
 
@@ -1150,13 +1150,13 @@ Never store information that can be calculated.
 Bad:
 
 ```ts
-const [productCount, setProductCount]
+const [productCount, setProductCount];
 ```
 
 Good:
 
 ```ts
-const productCount = products.length
+const productCount = products.length;
 ```
 
 Derived state automatically remains correct. Stored state eventually becomes stale.
@@ -1305,7 +1305,7 @@ Database schemas evolve. Every schema change requires versioning, a migration, a
 
 ## No Hidden Data
 
-Every stored value should have a clear purpose. Avoid mysterious columns, unused fields, and speculative storage. Every field should answer *"why does this exist?"* — if the answer is unclear, remove it.
+Every stored value should have a clear purpose. Avoid mysterious columns, unused fields, and speculative storage. Every field should answer _"why does this exist?"_ — if the answer is unclear, remove it.
 
 ## Timestamps and Auditability
 
@@ -1414,7 +1414,7 @@ Before recommending new libraries, frameworks, patterns, or infrastructure, AI s
 
 ## Never Hide Uncertainty
 
-When uncertain, say so. Prefer *"I'm not certain"* over confidently incorrect information. Honesty builds trust; false certainty destroys it.
+When uncertain, say so. Prefer _"I'm not certain"_ over confidently incorrect information. Honesty builds trust; false certainty destroys it.
 
 ## Challenge Decisions Respectfully
 
@@ -1468,7 +1468,7 @@ Purpose: defines the permanent engineering philosophy of Hanu — mission, visio
 
 ## Architecture Documentation — `docs/architecture/`
 
-Purpose: explain *how* the system is designed. Includes system architecture, domain model, tech stack, offline architecture, information architecture, and ADRs. These documents evolve only when architecture changes.
+Purpose: explain _how_ the system is designed. Includes system architecture, domain model, tech stack, offline architecture, information architecture, and ADRs. These documents evolve only when architecture changes.
 
 ## Memory Documents — `docs/memory/`
 
@@ -1478,7 +1478,7 @@ Purpose: capture temporary, evolving engineering context. Unlike architecture do
 
 **CURRENT_SPRINT.md** — represents current engineering focus: sprint objective, current milestone, active feature, remaining work, known blockers. Changes frequently; only one sprint should be active at a time.
 
-**DECISION_LOG.md** — records important engineering decisions. Each entry should include date, context, decision, reasoning, alternatives considered, and consequences. Future engineers should understand *why* a decision was made, not simply *what* was chosen.
+**DECISION_LOG.md** — records important engineering decisions. Each entry should include date, context, decision, reasoning, alternatives considered, and consequences. Future engineers should understand _why_ a decision was made, not simply _what_ was chosen.
 
 **TECH_DEBT.md** — tracks intentional compromises: temporary implementations, architectural shortcuts, known bugs, missing tests, future refactors. Technical debt should never exist silently — every shortcut needs an owner and an exit strategy.
 
@@ -1494,9 +1494,9 @@ Documentation should be accurate, concise, technical, maintainable, and version 
 
 **Preserve decisions, not just outcomes.**
 
-Bad: *"Switched to Zustand."*
+Bad: _"Switched to Zustand."_
 
-Good: *"Redux introduced unnecessary boilerplate for Hanu's relatively small global state. Zustand provided simpler APIs, reduced bundle size, and aligned with our feature-first architecture."*
+Good: _"Redux introduced unnecessary boilerplate for Hanu's relatively small global state. Zustand provided simpler APIs, reduced bundle size, and aligned with our feature-first architecture."_
 
 Reasoning has a longer lifespan than implementation.
 
@@ -1683,6 +1683,7 @@ A feature is Done when it: solves the correct problem; respects the architecture
 > A condensed index of the absolutes already stated throughout this document. If a decision violates one of these, stop — no exception is justified by deadline, convenience, or preference.
 
 **Data & Persistence**
+
 1. Never silently lose user data — preserve it over convenience, speed, or consistency.
 2. Once the owner presses Save, the work is safe — regardless of network, battery, or crash.
 3. The local database is the working copy; the cloud is backup and sync, never the primary source.
@@ -1693,37 +1694,10 @@ A feature is Done when it: solves the correct problem; respects the architecture
 8. Never manually edit production schemas — migrations only, always with a rollback strategy.
 9. Never rely solely on frontend validation — constraints belong in the database too.
 
-**Architecture & Code**
-10. Business logic never lives in UI components.
-11. The Domain layer never imports React, UI components, or external SDKs.
-12. Dependencies always point inward: UI → Application → Domain.
-13. Never add a dependency without justification — the default answer is no.
-14. `any` is forbidden without a documented, justified reason.
-15. Never ignore an error — `catch (e) {}` is forbidden; every failure must be visible and recoverable.
-16. Never hardcode magic numbers — use named constants or enums.
-17. One file, one clear responsibility.
-18. Premature abstraction is technical debt — apply the Rule of Three before abstracting.
-19. Never sacrifice correctness for performance, elegance, or convenience.
+**Architecture & Code** 10. Business logic never lives in UI components. 11. The Domain layer never imports React, UI components, or external SDKs. 12. Dependencies always point inward: UI → Application → Domain. 13. Never add a dependency without justification — the default answer is no. 14. `any` is forbidden without a documented, justified reason. 15. Never ignore an error — `catch (e) {}` is forbidden; every failure must be visible and recoverable. 16. Never hardcode magic numbers — use named constants or enums. 17. One file, one clear responsibility. 18. Premature abstraction is technical debt — apply the Rule of Three before abstracting. 19. Never sacrifice correctness for performance, elegance, or convenience.
 
-**State**
-20. Every piece of state has exactly one owner — never duplicate ownership of business data.
-21. Never store information that can be derived or calculated.
-22. Business state lives in repositories and the database — never raw React component state.
-23. Global state stays small — if only one screen needs it, it isn't global.
+**State** 20. Every piece of state has exactly one owner — never duplicate ownership of business data. 21. Never store information that can be derived or calculated. 22. Business state lives in repositories and the database — never raw React component state. 23. Global state stays small — if only one screen needs it, it isn't global.
 
-**Offline & Mobile**
-24. Offline capability is a property of the architecture, not a feature toggle.
-25. Every user action writes locally and updates the UI immediately — never wait on the network first.
-26. Synchronization is automatic and invisible — the owner is never asked to manually sync.
-27. Mobile is the product, not a responsive afterthought — design phone-first, always.
-28. Every gesture needs an obvious, accessible alternative.
-29. Accessibility is part of quality, not an edge case.
+**Offline & Mobile** 24. Offline capability is a property of the architecture, not a feature toggle. 25. Every user action writes locally and updates the UI immediately — never wait on the network first. 26. Synchronization is automatic and invisible — the owner is never asked to manually sync. 27. Mobile is the product, not a responsive afterthought — design phone-first, always. 28. Every gesture needs an obvious, accessible alternative. 29. Accessibility is part of quality, not an edge case.
 
-**Process & Knowledge**
-30. Documentation is part of implementation, not an afterthought — code and docs change in the same pull request.
-31. Never rewrite engineering history — record a new decision, don't erase the old one.
-32. Technical debt is acceptable only when it is intentional, documented, and temporary.
-33. The repository is the single source of truth — never depend on conversation memory for project knowledge.
-34. AI-generated code is reviewed with the same scrutiny as a junior engineer's pull request — trust evidence, never confidence.
-35. AI must never invent business rules, workflows, or edge cases — ask when requirements are ambiguous.
-36. A feature is not done because it compiles — it's done when the business owner can confidently rely on it.
+**Process & Knowledge** 30. Documentation is part of implementation, not an afterthought — code and docs change in the same pull request. 31. Never rewrite engineering history — record a new decision, don't erase the old one. 32. Technical debt is acceptable only when it is intentional, documented, and temporary. 33. The repository is the single source of truth — never depend on conversation memory for project knowledge. 34. AI-generated code is reviewed with the same scrutiny as a junior engineer's pull request — trust evidence, never confidence. 35. AI must never invent business rules, workflows, or edge cases — ask when requirements are ambiguous. 36. A feature is not done because it compiles — it's done when the business owner can confidently rely on it.

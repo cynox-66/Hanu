@@ -1,6 +1,6 @@
 ---
 trigger: glob
-globs: ["**/*.tsx", "**/*.jsx"]
+globs: ['**/*.tsx', '**/*.jsx']
 description: Rules for React components — presentation, state, hooks, accessibility
 ---
 
@@ -10,7 +10,7 @@ Applies whenever a component is created or modified. Architecture context lives 
 
 ## Components are presentational
 
-A component answers *"what should be displayed?"* — never *"how does the business work?"*
+A component answers _"what should be displayed?"_ — never _"how does the business work?"_
 
 - No fetch calls, repository calls, or validation logic inside a component body.
 - No business calculations (totals, statuses, eligibility) — compute these in a hook, service, or the domain layer and pass the result in.
@@ -19,7 +19,7 @@ A component answers *"what should be displayed?"* — never *"how does the busin
 ## Hooks own behavior
 
 - Shared business logic goes in a custom hook (`useProducts`, `useOrders`, `useOfflineSync`), not duplicated across components.
-- A hook should encapsulate *behavior*; it should not return JSX or know about layout.
+- A hook should encapsulate _behavior_; it should not return JSX or know about layout.
 - Don't create a hook for logic used exactly once — extract on the third repetition (Rule of Three), not the first.
 
 ## State ownership
@@ -39,6 +39,7 @@ Before adding `useState`, ask: can this be derived from props or existing state?
 ## Accessibility (non-optional)
 
 Every interactive element must support:
+
 - Keyboard navigation and a sane focus order
 - Screen reader labels (`aria-label`, semantic HTML over `<div onClick>`)
 - Sufficient color contrast

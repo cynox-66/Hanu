@@ -7,7 +7,11 @@ interface ProductFormProps {
   isSubmitting?: boolean;
 }
 
-export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmit, isSubmitting }) => {
+export const ProductForm: React.FC<ProductFormProps> = ({
+  initialValues,
+  onSubmit,
+  isSubmitting,
+}) => {
   const [name, setName] = useState(initialValues?.name || '');
   const [category, setCategory] = useState(initialValues?.category || '');
   const [sellingPrice, setSellingPrice] = useState(initialValues?.sellingPrice?.toString() || '');
@@ -55,8 +59,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       {/* Image Placeholder */}
       <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50 px-6 py-8">
-        <svg className="h-8 w-8 text-gray-400 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+        <svg
+          className="h-8 w-8 text-gray-400 mb-2"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={1.5}
+            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+          />
         </svg>
         <span className="text-sm font-medium text-gray-600">Upload Product Image</span>
         <span className="text-xs text-gray-400 mt-1">(Coming soon)</span>
@@ -65,7 +80,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
       <div className="space-y-4">
         {/* Name */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            Product Name *
+          </label>
           <input
             id="name"
             type="text"
@@ -80,7 +97,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
         {/* Pricing row */}
         <div className="flex gap-4">
           <div className="flex-1">
-            <label htmlFor="sellingPrice" className="block text-sm font-medium text-gray-700 mb-1">Selling Price (₹) *</label>
+            <label htmlFor="sellingPrice" className="block text-sm font-medium text-gray-700 mb-1">
+              Selling Price (₹) *
+            </label>
             <input
               id="sellingPrice"
               type="number"
@@ -90,10 +109,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
               className={`block w-full rounded-xl border ${errors.sellingPrice ? 'border-red-500' : 'border-gray-300'} px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900`}
               placeholder="0.00"
             />
-            {errors.sellingPrice && <p className="mt-1 text-sm text-red-500">{errors.sellingPrice}</p>}
+            {errors.sellingPrice && (
+              <p className="mt-1 text-sm text-red-500">{errors.sellingPrice}</p>
+            )}
           </div>
           <div className="flex-1">
-            <label htmlFor="costPrice" className="block text-sm font-medium text-gray-700 mb-1">Cost Price (₹)</label>
+            <label htmlFor="costPrice" className="block text-sm font-medium text-gray-700 mb-1">
+              Cost Price (₹)
+            </label>
             <input
               id="costPrice"
               type="number"
@@ -110,7 +133,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
         {/* Category & Status */}
         <div className="flex gap-4">
           <div className="flex-1">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+              Category
+            </label>
             <input
               id="category"
               type="text"
@@ -121,7 +146,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
             />
           </div>
           <div className="flex-1">
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+              Status
+            </label>
             <select
               id="status"
               value={status}
@@ -137,7 +164,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
 
         {/* Description */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+            Description
+          </label>
           <textarea
             id="description"
             value={description}
@@ -150,7 +179,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmi
 
         {/* Notes */}
         <div>
-          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">Private Notes</label>
+          <label htmlFor="notes" className="block text-sm font-medium text-gray-700 mb-1">
+            Private Notes
+          </label>
           <textarea
             id="notes"
             value={notes}

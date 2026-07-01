@@ -10,7 +10,7 @@ export function useProduct(id: string) {
 
   const fetchProduct = useCallback(async () => {
     if (!id) return;
-    
+
     setIsLoading(true);
     setError(null);
     try {

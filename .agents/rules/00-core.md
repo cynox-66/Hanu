@@ -32,15 +32,18 @@ Full reasoning lives in `AGENTS.md` (philosophy) and `ENGINEERING_PLAYBOOK.md` (
 ## When uncertain
 
 Fall back to the priority order in `AGENTS.md` §15:
+
 ```
 Correctness → User Value → Reliability → Simplicity → Maintainability
    → Offline Capability → Performance → Developer Experience → Convenience
 ```
+
 A higher priority always wins over a lower one. If a trade-off isn't obvious from this list, say so explicitly rather than guessing.
 
 ## Escalate, don't silently decide
 
 Flag — instead of resolving unilaterally — any change that:
+
 - touches authentication, payments, or the synchronization engine
 - introduces a new dependency
 - changes the database schema

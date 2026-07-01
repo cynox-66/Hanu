@@ -1,6 +1,6 @@
 # Hanu Engineering Playbook
 
-> This document is operational. It describes *how* we work — the pipeline, the process tiers, the review steps. It changes as our process matures. The *why* behind this process — the permanent engineering philosophy — lives in `AGENTS.md` §6 (Development Workflow), and that document takes priority if the two ever disagree.
+> This document is operational. It describes _how_ we work — the pipeline, the process tiers, the review steps. It changes as our process matures. The _why_ behind this process — the permanent engineering philosophy — lives in `AGENTS.md` §6 (Development Workflow), and that document takes priority if the two ever disagree.
 
 ---
 
@@ -80,7 +80,7 @@ Real workflows reveal problems that specifications cannot.
 
 ## Documentation and Commits
 
-Engineering is incomplete until knowledge is preserved. Whenever architecture changes, update documentation, decision logs, technical debt records, and implementation notes (see `AGENTS.md` §14) — future contributors should understand *why* something exists, not only *how* it works.
+Engineering is incomplete until knowledge is preserved. Whenever architecture changes, update documentation, decision logs, technical debt records, and implementation notes (see `AGENTS.md` §14) — future contributors should understand _why_ something exists, not only _how_ it works.
 
 Commits should represent complete thoughts, answering "what changed" and "why":
 

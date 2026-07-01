@@ -18,7 +18,7 @@ Refactoring framework lives in `AGENTS.md` §15 ("refactor only when it improves
 ## Process
 
 1. **Confirm the motivation.** What specifically is hard to read, duplicated, or fragile here? If the justification is "this looks old" rather than a concrete problem, don't proceed.
-2. **Establish a behavior baseline.** Identify existing tests covering this code. If coverage is thin, recommend adding characterization tests *before* refactoring — flag this rather than refactoring un-protected code blind.
+2. **Establish a behavior baseline.** Identify existing tests covering this code. If coverage is thin, recommend adding characterization tests _before_ refactoring — flag this rather than refactoring un-protected code blind.
 3. **Scope the change.** Refactor only what serves the stated motivation. Don't let a naming cleanup grow into a restructure, and don't bundle refactoring with feature work in the same change.
 4. **Refactor incrementally.** Prefer a sequence of small, independently verifiable steps over one large rewrite. Each step should leave the code working and tests passing before the next.
 5. **Verify behavior after each step.** Tests pass, and where applicable, manual confirmation that output is unchanged.

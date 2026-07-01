@@ -1,4 +1,5 @@
 # Hanu
+
 # User Journeys
 
 Version: 1.0
@@ -46,6 +47,7 @@ Hanu should mirror these mental models.
 ---
 
 # Journey 1
+
 ## Add New Product
 
 Goal
@@ -120,6 +122,7 @@ Product is ready to sell.
 ---
 
 # Journey 2
+
 ## Share Product
 
 Goal
@@ -175,6 +178,7 @@ Product reaches customers.
 ---
 
 # Journey 3
+
 ## Record Order
 
 Goal
@@ -254,6 +258,7 @@ Order recorded.
 ---
 
 # Journey 4
+
 ## Receive Payment
 
 Goal
@@ -305,6 +310,7 @@ Payment status updated.
 ---
 
 # Journey 5
+
 ## Prepare Shipment
 
 Goal
@@ -362,6 +368,7 @@ Under 30 seconds.
 ---
 
 # Journey 6
+
 ## Deliver Order
 
 Goal
@@ -391,6 +398,7 @@ Done.
 ---
 
 # Journey 7
+
 ## Find Product
 
 Goal
@@ -430,6 +438,7 @@ Under 5 seconds.
 ---
 
 # Journey 8
+
 ## Find Customer
 
 Goal
@@ -475,6 +484,7 @@ Under 5 seconds.
 ---
 
 # Journey 9
+
 ## Review Today's Work
 
 Goal
@@ -512,6 +522,7 @@ User instantly knows what needs attention.
 ---
 
 # Journey 10
+
 ## End of Day
 
 Goal
@@ -549,6 +560,7 @@ Close App
 ---
 
 # Error Journey
+
 ## Product Out Of Stock
 
 Customer wants product.
@@ -572,6 +584,7 @@ Done.
 ---
 
 # Error Journey
+
 ## Customer Cancels
 
 Open Order
@@ -591,6 +604,7 @@ Done.
 ---
 
 # Error Journey
+
 ## Wrong Payment Status
 
 Open Order
@@ -610,6 +624,7 @@ Save
 ---
 
 # Error Journey
+
 ## Wrong Product Added
 
 Open Product
@@ -625,6 +640,7 @@ Save
 ---
 
 # Future Journey
+
 ## Exhibition Selling
 
 Dashboard
@@ -658,6 +674,7 @@ Not Included.
 ---
 
 # Future Journey
+
 ## Courier Pickup
 
 Order
@@ -685,6 +702,7 @@ Version 2
 ---
 
 # Future Journey
+
 ## Customer Catalog
 
 Customer opens shared link

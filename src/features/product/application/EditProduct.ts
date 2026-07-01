@@ -10,7 +10,7 @@ export class EditProduct {
       ...updates,
       updatedAt: new Date().toISOString(),
     };
-    
+
     await this.repository.save(updatedProduct);
     return updatedProduct;
   }

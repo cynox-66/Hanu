@@ -24,7 +24,7 @@ export interface Product {
  * Consumed exclusively by ProductFactory and the CreateProduct use case.
  * stockQuantity is intentionally absent — the domain invariant always initialises it to 0.
  */
-export interface CreateProductDTO extends Omit<Product, 'id' | 'createdAt' | 'updatedAt' | 'stockQuantity'> {}
+export type CreateProductDTO = Omit<Product, 'id' | 'createdAt' | 'updatedAt' | 'stockQuantity'>;
 
 /**
  * DTO for updating an existing Product.
@@ -32,4 +32,4 @@ export interface CreateProductDTO extends Omit<Product, 'id' | 'createdAt' | 'up
  * Kept as a distinct semantic type so future fields (e.g. inventory adjustments)
  * can diverge from CreateProductDTO without breaking the creation path.
  */
-export interface UpdateProductDTO extends Omit<Product, 'id' | 'createdAt' | 'updatedAt' | 'stockQuantity'> {}
+export type UpdateProductDTO = Omit<Product, 'id' | 'createdAt' | 'updatedAt' | 'stockQuantity'>;

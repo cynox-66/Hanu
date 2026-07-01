@@ -6,18 +6,21 @@ export function useDeleteProduct() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const remove = useCallback(async (id: string) => {
-    setIsDeleting(true);
-    setError(null);
-    try {
-      await deleteProduct.execute(id);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to delete product'));
-      throw err;
-    } finally {
-      setIsDeleting(false);
-    }
-  }, [deleteProduct]);
+  const remove = useCallback(
+    async (id: string) => {
+      setIsDeleting(true);
+      setError(null);
+      try {
+        await deleteProduct.execute(id);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Failed to delete product'));
+        throw err;
+      } finally {
+        setIsDeleting(false);
+      }
+    },
+    [deleteProduct],
+  );
 
   return { remove, isDeleting, error };
 }

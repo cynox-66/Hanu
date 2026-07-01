@@ -1,4 +1,5 @@
 # Hanu
+
 # Product Requirements Document (PRD)
 
 Version: 1.0
@@ -124,13 +125,13 @@ Quick Actions
 
 Quick Actions
 
-+ Add Product
+- Add Product
 
-+ New Order
+- New Order
 
-+ Ship Order
+- Ship Order
 
-+ Share Product
+- Share Product
 
 ---
 

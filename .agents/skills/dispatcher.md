@@ -5,7 +5,7 @@ description: Primary entry point for engineering requests. Classifies the task, 
 
 # Dispatcher
 
-The Dispatcher is a router, not an engineer. It never makes an engineering judgment itself — it decides *which* skill makes that judgment, in *what order*, and *whether implementation may begin*. All actual philosophy and process live in `AGENTS.md`, `ENGINEERING_PLAYBOOK.md`, and the skills listed below; this file never restates them.
+The Dispatcher is a router, not an engineer. It never makes an engineering judgment itself — it decides _which_ skill makes that judgment, in _what order_, and _whether implementation may begin_. All actual philosophy and process live in `AGENTS.md`, `ENGINEERING_PLAYBOOK.md`, and the skills listed below; this file never restates them.
 
 Invoke this skill first for nearly any engineering request. Skip it only when the user has already named a specific skill explicitly (e.g. "run code-review on this diff").
 
@@ -35,20 +35,20 @@ Use the Level 1–4 definitions from `ENGINEERING_PLAYBOOK.md`. State which leve
 
 Match category + level to skills. Use the smallest correct set — don't attach a skill "just in case."
 
-| Situation | Skills |
-|---|---|
-| Simple feature (Level 1–2) | `feature-development` |
-| Larger feature (Level 3+) | `feature-development` → `architecture-review` → `code-review` → `documentation-update` |
-| Bug | `bug-investigation` → `code-review` |
-| Refactor | `refactoring` → `code-review` |
-| Dependency evaluation | `dependency-review` (+ `architecture-review` if adopted) |
-| React component work | `react-review` + `ui-review` |
-| Database change | `database-review` + `offline-first-review` + `code-review` |
-| Touches offline/sync paths | add `offline-first-review` |
-| Touches the database | add `database-review` |
-| UI-facing change | add `ui-review` |
-| Architecture-significant change | add `architecture-review` |
-| Pure question / research | no skill — answer directly |
+| Situation                       | Skills                                                                                 |
+| ------------------------------- | -------------------------------------------------------------------------------------- |
+| Simple feature (Level 1–2)      | `feature-development`                                                                  |
+| Larger feature (Level 3+)       | `feature-development` → `architecture-review` → `code-review` → `documentation-update` |
+| Bug                             | `bug-investigation` → `code-review`                                                    |
+| Refactor                        | `refactoring` → `code-review`                                                          |
+| Dependency evaluation           | `dependency-review` (+ `architecture-review` if adopted)                               |
+| React component work            | `react-review` + `ui-review`                                                           |
+| Database change                 | `database-review` + `offline-first-review` + `code-review`                             |
+| Touches offline/sync paths      | add `offline-first-review`                                                             |
+| Touches the database            | add `database-review`                                                                  |
+| UI-facing change                | add `ui-review`                                                                        |
+| Architecture-significant change | add `architecture-review`                                                              |
+| Pure question / research        | no skill — answer directly                                                             |
 
 Combine rows when a request matches more than one (e.g. a feature that's also a database change gets the feature row's skills plus `database-review`). Never select a review skill for work that doesn't touch its domain.
 
@@ -56,18 +56,18 @@ Combine rows when a request matches more than one (e.g. a feature that's also a 
 
 Always choose the minimum set of MCPs required — never select one "just in case," and prefer deterministic execution (skills and direct file edits) over reaching for a tool unless the task actually needs it.
 
-| Situation | MCPs |
-|---|---|
-| General implementation | `filesystem` |
-| React / framework APIs | `context7` |
-| Library / API documentation | `context7` |
-| Architecture reasoning | `sequential-thinking` |
-| Complex engineering planning | `sequential-thinking` + `context7` |
-| GitHub issues / PRs / repository metadata | `github` |
-| Browser debugging | `chrome-devtools` |
-| UI validation | `playwright` |
-| UI debugging | `playwright` + `chrome-devtools` |
-| Pure question / research | none |
+| Situation                                 | MCPs                               |
+| ----------------------------------------- | ---------------------------------- |
+| General implementation                    | `filesystem`                       |
+| React / framework APIs                    | `context7`                         |
+| Library / API documentation               | `context7`                         |
+| Architecture reasoning                    | `sequential-thinking`              |
+| Complex engineering planning              | `sequential-thinking` + `context7` |
+| GitHub issues / PRs / repository metadata | `github`                           |
+| Browser debugging                         | `chrome-devtools`                  |
+| UI validation                             | `playwright`                       |
+| UI debugging                              | `playwright` + `chrome-devtools`   |
+| Pure question / research                  | none                               |
 
 Combine MCPs when a request matches more than one situation (e.g. a feature implementation touching React selects `filesystem` + `context7`; a UI bug selects `filesystem` + `playwright` + `chrome-devtools`). Select only by name — never explain how to use the MCP or duplicate what it would return (e.g. don't restate Context7 documentation here).
 
@@ -96,6 +96,7 @@ Review and approval steps always precede implementation; `code-review` always fo
 ## Step 7 — Approval gate
 
 Require explicit human approval before implementation begins if the request involves any of:
+
 - an architecture change
 - a new dependency
 - a major refactor
