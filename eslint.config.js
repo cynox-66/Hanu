@@ -6,7 +6,7 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 
 export default [
-  { ignores: ['dist/**'] },
+  { ignores: ['dist/**', 'vite.config.js', 'vite.config.d.ts'] },
   { files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'] },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,

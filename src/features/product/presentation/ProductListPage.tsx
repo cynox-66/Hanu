@@ -3,7 +3,7 @@ import { ProductList } from './ProductList';
 
 export const ProductListPage: React.FC = () => {
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <div className="flex flex-col bg-gray-50">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white px-4 pb-3 pt-safe-top shadow-sm">
         <div className="flex items-center justify-between pt-3">

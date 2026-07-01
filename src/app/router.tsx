@@ -1,14 +1,43 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { App } from './App';
+import { AppShell } from './AppShell';
+import { DashboardPage } from './DashboardPage';
+import { OrdersPage, ReportsPage, SettingsPage } from './PlaceholderPages';
+import { ProductListPage } from '../features/product/presentation/ProductListPage';
 import { CreateProductPage } from '../features/product/presentation/CreateProductPage';
 import { EditProductPage } from '../features/product/presentation/EditProductPage';
 import { CustomerListPage, CreateCustomerPage, EditCustomerPage } from '../features/customer';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <App />,
+    element: <AppShell />,
+    children: [
+      {
+        path: '/',
+        element: <DashboardPage />,
+      },
+      {
+        path: '/products',
+        element: <ProductListPage />,
+      },
+      {
+        path: '/customers',
+        element: <CustomerListPage />,
+      },
+      {
+        path: '/orders',
+        element: <OrdersPage />,
+      },
+      {
+        path: '/reports',
+        element: <ReportsPage />,
+      },
+      {
+        path: '/settings',
+        element: <SettingsPage />,
+      },
+    ],
   },
+  // Full-screen pages outside the shell (own header + back button)
   {
     path: '/products/new',
     element: <CreateProductPage />,
@@ -16,10 +45,6 @@ const router = createBrowserRouter([
   {
     path: '/products/:id/edit',
     element: <EditProductPage />,
-  },
-  {
-    path: '/customers',
-    element: <CustomerListPage />,
   },
   {
     path: '/customers/new',
