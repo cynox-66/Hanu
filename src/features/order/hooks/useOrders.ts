@@ -1,29 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../../../infrastructure/db/database';
 import { Order } from '../types';
-import { useOrderUseCases } from './OrderContext';
 
+/**
+ * Returns all non-archived orders as a live query.
+ * Auto-updates when a new sale is created.
+ */
 export function useOrders() {
-  const { getOrders } = useOrderUseCases();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const orders = useLiveQuery<Order[]>(
+    () => db.orders.where('status').notEqual('archived').toArray(),
+    [],
+  );
 
-  const fetchOrders = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await getOrders.execute();
-      setOrders(data);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch orders'));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getOrders]);
-
-  useEffect(() => {
-    fetchOrders();
-  }, [fetchOrders]);
-
-  return { orders, isLoading, error, refetch: fetchOrders };
+  const isLoading = orders === undefined;
+  return { orders: orders ?? [], isLoading, error: null };
 }

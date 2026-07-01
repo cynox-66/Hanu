@@ -2,15 +2,10 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useOrders, useArchiveOrder, useOrderSearch } from '../hooks';
 import { OrderCard } from './OrderCard';
-import {
-  OrderListSkeleton,
-  OrderListEmpty,
-  OrderListError,
-  OrderListNoSearchResults,
-} from './OrderListStates';
+import { OrderListSkeleton, OrderListEmpty, OrderListNoSearchResults } from './OrderListStates';
 
 export const OrderList: React.FC = () => {
-  const { orders, isLoading, error, refetch } = useOrders();
+  const { orders, isLoading } = useOrders();
   const { archiveOrder, isArchiving } = useArchiveOrder();
   const { searchQuery, setSearchQuery, filteredOrders } = useOrderSearch(orders);
   const [orderToArchive, setOrderToArchive] = useState<{ id: string; name: string } | null>(null);
@@ -19,7 +14,7 @@ export const OrderList: React.FC = () => {
     if (!orderToArchive) return;
     try {
       await archiveOrder(orderToArchive.id);
-      await refetch();
+      // liveQuery automatically updates the list — no manual refetch needed
     } catch (err) {
       console.error('Failed to archive order:', err);
     } finally {
@@ -29,10 +24,6 @@ export const OrderList: React.FC = () => {
 
   if (isLoading) {
     return <OrderListSkeleton />;
-  }
-
-  if (error) {
-    return <OrderListError onRetry={refetch} />;
   }
 
   if (orders.length === 0) {

@@ -37,10 +37,20 @@ export const OrderListEmpty: React.FC = () => (
         />
       </svg>
     </div>
-    <h2 className="text-lg font-semibold text-gray-900">No orders yet</h2>
-    <p className="mt-2 text-sm text-gray-500 max-w-xs">
-      You haven&apos;t received any orders yet. Create your first order to track sales.
+    <h2 className="text-lg font-semibold text-gray-900">No sales yet</h2>
+    <p className="mt-2 text-sm text-gray-900 max-w-xs font-medium">
+      Sales records help you track your business revenue.
     </p>
+    <p className="mt-1 text-sm text-gray-500 max-w-xs">
+      You haven&apos;t recorded any sales yet. Tap the button below to record your first sale.
+    </p>
+    <a
+      href="/orders/new"
+      id="sales-empty-cta"
+      className="mt-6 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-semibold text-white active:scale-95 transition-transform duration-150"
+    >
+      + Record a Sale
+    </a>
   </div>
 );
 
@@ -63,10 +73,8 @@ export const OrderListError: React.FC<{ onRetry: () => void }> = ({ onRetry }) =
         />
       </svg>
     </div>
-    <h2 className="text-lg font-semibold text-gray-900">Couldn&apos;t load orders</h2>
-    <p className="mt-2 text-sm text-gray-500 max-w-xs">
-      Your data is safe. Check your storage and try again.
-    </p>
+    <h2 className="text-lg font-semibold text-gray-900">Couldn&apos;t load sales</h2>
+    <p className="mt-2 text-sm text-gray-500 max-w-xs">Your data is safe. Please try again.</p>
     <button
       onClick={onRetry}
       className="mt-6 rounded-xl bg-gray-900 px-6 py-3 text-sm font-medium text-white active:scale-95 transition-transform duration-150"
@@ -98,9 +106,9 @@ export const OrderListNoSearchResults: React.FC<{ searchQuery: string; onClear: 
         />
       </svg>
     </div>
-    <h2 className="text-lg font-semibold text-gray-900">No matching orders</h2>
+    <h2 className="text-lg font-semibold text-gray-900">No matching sales</h2>
     <p className="mt-2 text-sm text-gray-500 max-w-xs">
-      We couldn&apos;t find any orders matching &quot;{searchQuery}&quot;.
+      We couldn&apos;t find any sales matching &quot;{searchQuery}&quot;.
     </p>
     <button
       onClick={onClear}

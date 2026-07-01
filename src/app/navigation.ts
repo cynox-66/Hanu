@@ -15,41 +15,45 @@ export interface NavItem {
  *   3. Replace the placeholder page with the real implementation.
  *
  * No changes to AppShell, DashboardPage, or any other file are required.
+ *
+ * UI Language Rule: Use business terms only.
+ *   ✓ Products, Sales, Customers, Stock
+ *   ✗ Orders, Inventory Ledger, Movements
  */
 export const navigation: NavItem[] = [
+  {
+    label: 'Home',
+    icon: '🏠',
+    href: '/',
+    enabled: true,
+    description: 'Dashboard',
+  },
   {
     label: 'Products',
     icon: '📦',
     href: '/products',
     enabled: true,
-    description: 'Manage your catalogue',
+    description: 'What you sell',
+  },
+  {
+    label: 'Sales',
+    icon: '🧾',
+    href: '/orders',
+    enabled: true,
+    description: 'Your sales',
   },
   {
     label: 'Customers',
-    icon: '👥',
+    icon: '👤',
     href: '/customers',
     enabled: true,
-    description: 'Your customer directory',
+    description: 'Your buyers',
   },
   {
-    label: 'Orders',
-    icon: '📄',
-    href: '/orders',
+    label: 'Stock',
+    icon: '📊',
+    href: '/inventory',
     enabled: true,
-    description: 'Track your orders',
-  },
-  {
-    label: 'Reports',
-    icon: '📈',
-    href: '/reports',
-    enabled: false,
-    description: 'Business insights',
-  },
-  {
-    label: 'Settings',
-    icon: '⚙',
-    href: '/settings',
-    enabled: false,
-    description: 'App preferences',
+    description: 'Stock health',
   },
 ];

@@ -1,17 +1,17 @@
 import { Product } from '../types';
+import { normalizeText } from '../../../shared/utils/normalizeText';
 
 export class SearchProducts {
   execute(products: Product[], query: string): Product[] {
-    if (!query || !query.trim()) {
+    const normalizedQuery = normalizeText(query);
+    if (!normalizedQuery) {
       return products;
     }
 
-    const lowerQuery = query.toLowerCase().trim();
-
     return products.filter((product) => {
-      const nameMatch = product.name.toLowerCase().includes(lowerQuery);
+      const nameMatch = normalizeText(product.name).includes(normalizedQuery);
       const categoryMatch = product.category
-        ? product.category.toLowerCase().includes(lowerQuery)
+        ? normalizeText(product.category).includes(normalizedQuery)
         : false;
 
       return nameMatch || categoryMatch;

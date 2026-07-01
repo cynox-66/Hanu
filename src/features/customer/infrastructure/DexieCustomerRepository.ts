@@ -12,6 +12,17 @@ export class DexieCustomerRepository implements CustomerRepository {
     return await db.customers.where('status').notEqual('archived').toArray();
   }
 
+  /**
+   * Finds a customer by phone number across ALL statuses (including archived).
+   * This ensures phone numbers remain globally unique — even archived customers
+   * block re-use of their phone number.
+   */
+  async findByPhone(phone: string): Promise<Customer | null> {
+    const trimmed = phone.trim();
+    const result = await db.customers.filter((c) => c.phone.trim() === trimmed).first();
+    return result ?? null;
+  }
+
   async save(customer: Customer): Promise<void> {
     await db.customers.put(customer);
   }

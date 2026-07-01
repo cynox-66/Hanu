@@ -1,5 +1,6 @@
 import React from 'react';
 import { Order } from '../types';
+import { formatCurrency } from '../../../shared/utils/currency';
 
 interface OrderCardProps {
   order: Order;
@@ -80,8 +81,8 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onArchive }) => {
             </svg>
           </button>
         ) : (
-          <p className="text-base font-bold text-gray-900">
-            ₹{order.totalAmount.toLocaleString('en-IN')}
+          <p className="text-right text-sm font-bold text-gray-900">
+            {formatCurrency(order.totalAmount)}
           </p>
         )}
         <span

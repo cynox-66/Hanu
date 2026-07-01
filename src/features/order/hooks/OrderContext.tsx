@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useMemo } from 'react';
 import { OrderRepository } from '../domain/OrderRepository';
+import { InventoryRepository } from '../../inventory/domain/InventoryRepository';
 import { GetOrders } from '../application/GetOrders';
 import { GetOrderById } from '../application/GetOrderById';
 import { CreateOrder } from '../application/CreateOrder';
@@ -18,19 +19,24 @@ const OrderContext = createContext<OrderUseCases | null>(null);
 
 interface OrderProviderProps {
   repository: OrderRepository;
+  inventoryRepository: InventoryRepository;
   children: React.ReactNode;
 }
 
-export const OrderProvider: React.FC<OrderProviderProps> = ({ repository, children }) => {
+export const OrderProvider: React.FC<OrderProviderProps> = ({
+  repository,
+  inventoryRepository,
+  children,
+}) => {
   const useCases = useMemo(() => {
     return {
       getOrders: new GetOrders(repository),
       getOrderById: new GetOrderById(repository),
-      createOrder: new CreateOrder(repository),
+      createOrder: new CreateOrder(repository, inventoryRepository),
       editOrder: new EditOrder(repository),
       archiveOrder: new ArchiveOrder(repository),
     };
-  }, [repository]);
+  }, [repository, inventoryRepository]);
 
   return <OrderContext.Provider value={useCases}>{children}</OrderContext.Provider>;
 };

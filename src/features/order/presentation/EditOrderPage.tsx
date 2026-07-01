@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { formatCurrency } from '../../../shared/utils/currency';
 import { useOrder, useEditOrder } from '../hooks';
 import { OrderStatus, UpdateOrderDTO } from '../types';
 
@@ -126,21 +127,19 @@ export const EditOrderPage: React.FC = () => {
               >
                 <div className="flex flex-col">
                   <span className="font-medium text-gray-900">{item.productName}</span>
-                  <span className="text-xs text-gray-500">
-                    {item.quantity} × ₹{item.unitPrice.toLocaleString('en-IN')}
-                  </span>
+                  <p className="text-sm text-gray-900">
+                    {item.quantity} × {formatCurrency(item.unitPrice)}
+                  </p>
                 </div>
-                <span className="font-semibold text-gray-900">
-                  ₹{(item.quantity * item.unitPrice).toLocaleString('en-IN')}
-                </span>
+                <p className="text-sm font-semibold text-gray-900">
+                  {formatCurrency(item.quantity * item.unitPrice)}
+                </p>
               </li>
             ))}
           </ul>
           <div className="mt-2 flex justify-between items-center pt-3 border-t border-gray-100">
             <span className="font-bold text-gray-900 text-lg">Total</span>
-            <span className="font-bold text-gray-900 text-lg">
-              ₹{order.totalAmount.toLocaleString('en-IN')}
-            </span>
+            <p className="text-xl font-bold text-gray-900">{formatCurrency(order.totalAmount)}</p>
           </div>
         </section>
 

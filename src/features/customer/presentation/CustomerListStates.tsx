@@ -37,9 +37,19 @@ export const CustomerListEmpty: React.FC = () => (
       </svg>
     </div>
     <h2 className="text-lg font-semibold text-gray-900">No customers yet</h2>
-    <p className="mt-2 text-sm text-gray-500 max-w-xs">
-      Your customer list is empty. Wait for customers to make their first purchase.
+    <p className="mt-2 text-sm text-gray-900 max-w-xs font-medium">
+      Customers help you keep track of purchases and relationships.
     </p>
+    <p className="mt-1 text-sm text-gray-500 max-w-xs">
+      You haven&apos;t added any customers yet. Add a customer or wait for their first purchase.
+    </p>
+    <a
+      href="/customers/new"
+      id="customers-empty-cta"
+      className="mt-6 rounded-xl bg-gray-900 px-6 py-3 text-sm font-semibold text-white active:scale-95 transition-transform duration-150"
+    >
+      + Add Customer
+    </a>
   </div>
 );
 

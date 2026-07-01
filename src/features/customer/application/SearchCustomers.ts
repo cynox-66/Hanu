@@ -1,17 +1,21 @@
 import { Customer } from '../types';
+import { normalizeText } from '../../../shared/utils/normalizeText';
 
 export class SearchCustomers {
   execute(customers: Customer[], query: string): Customer[] {
-    if (!query || !query.trim()) {
+    const normalizedQuery = normalizeText(query);
+    if (!normalizedQuery) {
       return customers;
     }
 
-    const lowerQuery = query.toLowerCase().trim();
+    const cleanPhoneQuery = normalizedQuery.replace(/\s+/g, '');
 
     return customers.filter((customer) => {
-      const nameMatch = customer.name.toLowerCase().includes(lowerQuery);
-      const phoneMatch = customer.phone.toLowerCase().includes(lowerQuery);
-      const emailMatch = customer.email ? customer.email.toLowerCase().includes(lowerQuery) : false;
+      const nameMatch = normalizeText(customer.name).includes(normalizedQuery);
+      const phoneMatch = customer.phone.replace(/\s+/g, '').includes(cleanPhoneQuery);
+      const emailMatch = customer.email
+        ? normalizeText(customer.email).includes(normalizedQuery)
+        : false;
 
       return nameMatch || phoneMatch || emailMatch;
     });

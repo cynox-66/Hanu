@@ -5,8 +5,15 @@ import { ReportsPage, SettingsPage } from './PlaceholderPages';
 import { ProductListPage } from '../features/product/presentation/ProductListPage';
 import { CreateProductPage } from '../features/product/presentation/CreateProductPage';
 import { EditProductPage } from '../features/product/presentation/EditProductPage';
+import { ProductDetailPage } from '../features/product/presentation/ProductDetailPage';
 import { CustomerListPage, CreateCustomerPage, EditCustomerPage } from '../features/customer';
 import { OrderListPage, CreateOrderPage, EditOrderPage } from '../features/order';
+import {
+  InventoryDashboardPage,
+  RecordMovementPage,
+  ProductStockDetailPage,
+  MovementHistoryPage,
+} from '../features/inventory';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +36,10 @@ const router = createBrowserRouter([
         element: <OrderListPage />,
       },
       {
+        path: '/inventory',
+        element: <InventoryDashboardPage />,
+      },
+      {
         path: '/reports',
         element: <ReportsPage />,
       },
@@ -42,6 +53,10 @@ const router = createBrowserRouter([
   {
     path: '/products/new',
     element: <CreateProductPage />,
+  },
+  {
+    path: '/products/:id',
+    element: <ProductDetailPage />,
   },
   {
     path: '/products/:id/edit',
@@ -62,6 +77,18 @@ const router = createBrowserRouter([
   {
     path: '/orders/:id/edit',
     element: <EditOrderPage />,
+  },
+  {
+    path: '/inventory/record',
+    element: <RecordMovementPage />,
+  },
+  {
+    path: '/inventory/:id',
+    element: <ProductStockDetailPage />,
+  },
+  {
+    path: '/inventory/history',
+    element: <MovementHistoryPage />,
   },
 ]);
 

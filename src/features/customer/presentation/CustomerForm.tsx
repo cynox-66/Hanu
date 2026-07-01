@@ -137,9 +137,9 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
             value={status}
             onChange={(e) => setStatus(e.target.value as CustomerStatus)}
             className="block w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 bg-white"
-            disabled // Locked to 'active' for now since there's no draft customer
           >
             <option value="active">Active</option>
+            <option value="archived">Inactive (Archive)</option>
           </select>
         </div>
 

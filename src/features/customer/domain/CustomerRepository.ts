@@ -16,6 +16,12 @@ export interface CustomerRepository {
   findAll(): Promise<Customer[]>;
 
   /**
+   * Finds a customer by phone number (exact match, active only).
+   * Used by the application layer to enforce the unique-phone-per-customer business rule.
+   */
+  findByPhone(phone: string): Promise<Customer | null>;
+
+  /**
    * Saves a customer (create or update).
    */
   save(customer: Customer): Promise<void>;

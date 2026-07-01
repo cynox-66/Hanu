@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { CustomerList } from './CustomerList';
 
 export const CustomerListPage: React.FC = () => {
@@ -7,8 +8,17 @@ export const CustomerListPage: React.FC = () => {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-white px-4 pb-3 pt-safe-top shadow-sm">
         <div className="flex items-center justify-between pt-3">
-          <h1 className="text-xl font-bold text-gray-900">Customers</h1>
-          <span className="text-sm text-gray-400">Directory</span>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">Customers</h1>
+            <p className="text-xs text-gray-400 mt-0.5">Your buyers</p>
+          </div>
+          <Link
+            to="/customers/new"
+            id="customers-add-btn"
+            className="rounded-full bg-gray-900 px-4 py-2 text-sm font-semibold text-white shadow-sm active:scale-95 transition-transform duration-150"
+          >
+            + Add
+          </Link>
         </div>
       </header>
 

@@ -16,6 +16,14 @@ export interface ProductRepository {
   findAll(): Promise<Product[]>;
 
   /**
+   * Finds a product whose normalized name matches the given normalized name.
+   * "Normalized" means: trimmed, lowercased, with consecutive spaces collapsed.
+   * Used by the application layer to enforce the unique-name business rule.
+   * Searches ALL products regardless of status (including archived).
+   */
+  findByNormalizedName(normalizedName: string): Promise<Product | null>;
+
+  /**
    * Saves a product (create or update).
    */
   save(product: Product): Promise<void>;

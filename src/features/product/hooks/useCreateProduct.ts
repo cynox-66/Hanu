@@ -8,11 +8,12 @@ export function useCreateProduct() {
   const [error, setError] = useState<Error | null>(null);
 
   const create = useCallback(
-    async (dto: CreateProductDTO) => {
+    async (dto: CreateProductDTO): Promise<string> => {
       setIsSaving(true);
       setError(null);
       try {
-        await createProduct.execute(dto);
+        const productId = await createProduct.execute(dto);
+        return productId;
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to create product'));
         throw err;

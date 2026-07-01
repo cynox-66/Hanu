@@ -17,8 +17,12 @@ export const EditCustomerPage: React.FC = () => {
     try {
       await edit(customer, dto);
       navigate('/customers');
-    } catch (_err) {
-      setSaveError('An error occurred while saving changes. Please try again.');
+    } catch (err) {
+      setSaveError(
+        err instanceof Error
+          ? err.message
+          : 'An error occurred while saving changes. Please try again.',
+      );
     }
   };
 

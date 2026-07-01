@@ -38,9 +38,19 @@ export const ProductListEmpty: React.FC = () => (
       </svg>
     </div>
     <h2 className="text-lg font-semibold text-gray-900">No products yet</h2>
-    <p className="mt-2 text-sm text-gray-500 max-w-xs">
-      Your product catalog is empty. Add your first product to get started.
+    <p className="mt-2 text-sm text-gray-900 max-w-xs font-medium">
+      Products are the items you sell in your store.
     </p>
+    <p className="mt-1 text-sm text-gray-500 max-w-xs">
+      You haven&apos;t added any products yet. Tap the button below to add your first one.
+    </p>
+    <a
+      href="/products/new"
+      id="products-empty-cta"
+      className="mt-6 rounded-xl bg-gray-900 px-6 py-3 text-sm font-semibold text-white active:scale-95 transition-transform duration-150"
+    >
+      + Add First Product
+    </a>
   </div>
 );
 

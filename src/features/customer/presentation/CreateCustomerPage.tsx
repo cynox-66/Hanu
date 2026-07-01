@@ -14,8 +14,12 @@ export const CreateCustomerPage: React.FC = () => {
     try {
       await create(dto);
       navigate('/customers');
-    } catch (_err) {
-      setError('An error occurred while saving the customer. Please try again.');
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'An error occurred while saving the customer. Please try again.',
+      );
     }
   };
 

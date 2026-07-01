@@ -13,6 +13,7 @@ export interface Product {
   sellingPrice: number;
   costPrice?: number;
   stockQuantity: number;
+  lowStockThreshold?: number;
   status: ProductStatus;
   notes?: string;
   createdAt: string;

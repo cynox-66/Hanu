@@ -4,6 +4,8 @@ import { useCreateOrder } from '../hooks';
 import { OrderItem, CreateOrderDTO } from '../types';
 import { useCustomers } from '../../customer/hooks';
 import { useProducts } from '../../product/hooks';
+import { useInventorySummaries } from '../../inventory/hooks/useInventorySummaries';
+import { formatCurrency } from '../../../shared/utils/currency';
 import { Product } from '../../product/types';
 import { CustomerSelector } from './CustomerSelector';
 import { ProductSelector } from './ProductSelector';
@@ -13,6 +15,7 @@ export const OrderBuilder: React.FC = () => {
   const navigate = useNavigate();
   const { customers, isLoading: customersLoading, error: customersError } = useCustomers();
   const { products, isLoading: productsLoading, error: productsError } = useProducts();
+  const { summaries } = useInventorySummaries();
   const { createOrder, isSaving, error: createError } = useCreateOrder();
 
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>('');
@@ -20,10 +23,23 @@ export const OrderBuilder: React.FC = () => {
   const [items, setItems] = useState<OrderItem[]>([]);
   const [notes, setNotes] = useState('');
 
+  // Build a map of productId → availableStock for O(1) lookup
+  const stockMap = useMemo(() => {
+    const map = new Map<string, number>();
+    summaries.forEach((s) => map.set(s.productId, s.availableStock));
+    return map;
+  }, [summaries]);
+
   const activeProducts = useMemo(() => products.filter((p) => p.status === 'active'), [products]);
   const activeCustomers = useMemo(
     () => customers.filter((c) => c.status === 'active'),
     [customers],
+  );
+
+  // Only show products that have stock available
+  const availableProducts = useMemo(
+    () => activeProducts.filter((p) => (stockMap.get(p.id) ?? 0) > 0),
+    [activeProducts, stockMap],
   );
 
   const total = useMemo(() => {
@@ -38,11 +54,15 @@ export const OrderBuilder: React.FC = () => {
   const handleAddProduct = (product: Product) => {
     setItems((currentItems) => {
       const existing = currentItems.find((i) => i.productId === product.id);
+      const maxQty = stockMap.get(product.id) ?? 0;
       if (existing) {
+        // Only increase if under stock limit
+        if (existing.quantity >= maxQty) return currentItems;
         return currentItems.map((i) =>
           i.productId === product.id ? { ...i, quantity: i.quantity + 1 } : i,
         );
       }
+      if (maxQty === 0) return currentItems; // Safety: shouldn't be selectable anyway
       return [
         ...currentItems,
         {
@@ -56,8 +76,11 @@ export const OrderBuilder: React.FC = () => {
   };
 
   const handleIncrease = (productId: string) => {
+    const maxQty = stockMap.get(productId) ?? 0;
     setItems((currentItems) =>
-      currentItems.map((i) => (i.productId === productId ? { ...i, quantity: i.quantity + 1 } : i)),
+      currentItems.map((i) =>
+        i.productId === productId ? { ...i, quantity: Math.min(maxQty, i.quantity + 1) } : i,
+      ),
     );
   };
 
@@ -97,9 +120,7 @@ export const OrderBuilder: React.FC = () => {
       {/* Mutation error — shown above content so user sees it without scrolling */}
       {createError && (
         <div className="rounded-xl border border-red-100 bg-red-50 px-4 py-3">
-          <p className="text-sm font-medium text-red-800">
-            Failed to create order. Please try again.
-          </p>
+          <p className="text-sm font-medium text-red-800">{createError.message}</p>
         </div>
       )}
 
@@ -136,14 +157,22 @@ export const OrderBuilder: React.FC = () => {
           <p className="text-sm text-red-600 py-2">
             Could not load products. Please go back and try again.
           </p>
+        ) : availableProducts.length === 0 ? (
+          <p className="text-sm text-amber-700 bg-amber-50 rounded-xl px-4 py-3">
+            No products with available stock. Add stock to a product first.
+          </p>
         ) : (
-          <ProductSelector products={activeProducts} onAdd={handleAddProduct} />
+          <ProductSelector
+            products={availableProducts}
+            stockMap={stockMap}
+            onAdd={handleAddProduct}
+          />
         )}
       </section>
 
       {/* Order Items */}
       <section className="bg-white p-4 rounded-2xl shadow-sm flex flex-col gap-4">
-        <h2 className="text-lg font-bold text-gray-900">Order Items</h2>
+        <h2 className="text-lg font-bold text-gray-900">Sale Items</h2>
 
         {items.length === 0 ? (
           <p className="text-sm text-gray-500 py-4 text-center">No products added yet.</p>
@@ -153,6 +182,7 @@ export const OrderBuilder: React.FC = () => {
               <li key={item.productId}>
                 <OrderItemRow
                   item={item}
+                  maxQuantity={stockMap.get(item.productId) ?? item.quantity}
                   onIncrease={() => handleIncrease(item.productId)}
                   onDecrease={() => handleDecrease(item.productId)}
                   onRemove={() => handleRemove(item.productId)}
@@ -177,16 +207,16 @@ export const OrderBuilder: React.FC = () => {
 
       {/* Bottom Sticky Bar */}
       <div className="fixed bottom-0 left-0 right-0 border-t border-gray-200 bg-white p-4 pb-safe-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-20">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between border-t border-gray-100 pt-3">
           <span className="text-base font-semibold text-gray-900">Total</span>
-          <span className="text-xl font-bold text-gray-900">₹{total.toLocaleString('en-IN')}</span>
+          <span className="text-xl font-bold text-gray-900">{formatCurrency(total)}</span>
         </div>
         <button
           onClick={handleCreateOrder}
           disabled={!isValid || isSaving}
           className="w-full rounded-xl bg-gray-900 px-4 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 disabled:opacity-50 transition-opacity"
         >
-          {isSaving ? 'Creating Order...' : 'Create Order'}
+          {isSaving ? 'Creating Sale...' : 'Confirm Sale'}
         </button>
       </div>
     </div>

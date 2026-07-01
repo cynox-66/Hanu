@@ -5,12 +5,11 @@ import { CustomerCard } from './CustomerCard';
 import {
   CustomerListSkeleton,
   CustomerListEmpty,
-  CustomerListError,
   CustomerListNoSearchResults,
 } from './CustomerListStates';
 
 export const CustomerList: React.FC = () => {
-  const { customers, isLoading, error, refetch } = useCustomers();
+  const { customers, isLoading } = useCustomers();
   const { archive, isArchiving } = useArchiveCustomer();
   const { searchQuery, setSearchQuery, filteredCustomers } = useCustomerSearch(customers);
   const [customerToArchive, setCustomerToArchive] = useState<{ id: string; name: string } | null>(
@@ -21,7 +20,7 @@ export const CustomerList: React.FC = () => {
     if (!customerToArchive) return;
     try {
       await archive(customerToArchive.id);
-      await refetch();
+      // liveQuery automatically updates the list — no manual refetch needed
     } catch (err) {
       console.error('Failed to archive customer:', err);
     } finally {
@@ -31,10 +30,6 @@ export const CustomerList: React.FC = () => {
 
   if (isLoading) {
     return <CustomerListSkeleton />;
-  }
-
-  if (error) {
-    return <CustomerListError onRetry={refetch} />;
   }
 
   if (customers.length === 0) {

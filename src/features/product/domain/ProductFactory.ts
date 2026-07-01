@@ -1,13 +1,18 @@
 import { CreateProductDTO, UpdateProductDTO, Product } from '../types';
+import { validateProductPricing } from './ProductValidation';
 
 /**
  * Domain Factory for creating new Product entities.
  * Enforces business invariants such as initial stock quantity and generated IDs.
  */
 export function createProductFromDTO(dto: CreateProductDTO): Product {
+  validateProductPricing(dto.sellingPrice, dto.costPrice);
+
   const now = new Date().toISOString();
   return {
     ...dto,
+    status: dto.status ?? 'active',
+    lowStockThreshold: dto.lowStockThreshold ?? 5,
     id: crypto.randomUUID(),
     stockQuantity: 0, // Invariant: New products start with 0 stock
     createdAt: now,
@@ -27,6 +32,8 @@ export function createProductFromDTO(dto: CreateProductDTO): Product {
  * costPrice, status, notes) from UpdateProductDTO are applied.
  */
 export function updateProduct(existingProduct: Product, updates: UpdateProductDTO): Product {
+  validateProductPricing(updates.sellingPrice, updates.costPrice);
+
   return {
     // Immutable identity
     id: existingProduct.id,
@@ -40,6 +47,7 @@ export function updateProduct(existingProduct: Product, updates: UpdateProductDT
     images: updates.images,
     sellingPrice: updates.sellingPrice,
     costPrice: updates.costPrice,
+    lowStockThreshold: updates.lowStockThreshold ?? existingProduct.lowStockThreshold ?? 5,
     status: updates.status,
     notes: updates.notes,
     // Domain-generated timestamp

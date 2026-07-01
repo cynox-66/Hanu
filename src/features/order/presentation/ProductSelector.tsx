@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Product } from '../../product/types';
+import { formatCurrency } from '../../../shared/utils/currency';
 
 interface ProductSelectorProps {
   products: Product[];
+  stockMap: Map<string, number>;
   onAdd: (product: Product) => void;
 }
 
-export const ProductSelector: React.FC<ProductSelectorProps> = ({ products, onAdd }) => {
+export const ProductSelector: React.FC<ProductSelectorProps> = ({ products, stockMap, onAdd }) => {
   const [selectedProductId, setSelectedProductId] = useState<string>('');
 
   const handleAdd = () => {
@@ -26,11 +28,14 @@ export const ProductSelector: React.FC<ProductSelectorProps> = ({ products, onAd
         className="block flex-1 rounded-xl border-0 py-3 pl-3 pr-10 text-base shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-gray-900 sm:text-sm"
       >
         <option value="">Select a product</option>
-        {products.map((p) => (
-          <option key={p.id} value={p.id}>
-            {p.name} - ₹{p.sellingPrice.toLocaleString('en-IN')}
-          </option>
-        ))}
+        {products.map((p) => {
+          const stock = stockMap.get(p.id) ?? 0;
+          return (
+            <option key={p.id} value={p.id}>
+              {p.name} — {formatCurrency(p.sellingPrice)} ({stock} in stock)
+            </option>
+          );
+        })}
       </select>
       <button
         onClick={handleAdd}

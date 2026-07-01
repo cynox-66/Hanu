@@ -1,19 +1,28 @@
 import React from 'react';
 import { Product } from '../types';
+import { useInventorySummary } from '../../inventory/hooks';
+import {
+  getInventoryAlertStatus,
+  getProductCardBadge,
+} from '../../inventory/domain/InventoryAlerts';
+import { formatCurrency } from '../../../shared/utils/currency';
 
 interface ProductCardProps {
   product: Product;
   onArchive?: (id: string) => void;
 }
 
-const STATUS_CONFIG: Record<Product['status'], { label: string; className: string }> = {
-  active: { label: 'Active', className: 'bg-green-100 text-green-800' },
-  draft: { label: 'Draft', className: 'bg-yellow-100 text-yellow-800' },
-  archived: { label: 'Archived', className: 'bg-gray-100 text-gray-500' },
-};
-
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onArchive }) => {
-  const status = STATUS_CONFIG[product.status];
+  const { summary } = useInventorySummary(product.id);
+  const currentStock = summary?.currentStock ?? 0;
+  const alertStatus = getInventoryAlertStatus(currentStock, product.lowStockThreshold);
+  const badge =
+    product.status === 'archived'
+      ? { label: 'Archived', className: 'bg-gray-100 text-gray-500 font-medium' }
+      : product.status === 'draft'
+        ? { label: 'Draft', className: 'bg-yellow-100 text-yellow-800 font-medium' }
+        : getProductCardBadge(alertStatus);
+
   const hasImage = product.images.length > 0;
 
   return (
@@ -73,15 +82,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onArchive }) 
             </svg>
           </button>
         ) : (
-          <p className="text-base font-bold text-gray-900">
-            ₹{product.sellingPrice.toLocaleString('en-IN')}
-          </p>
+          <p className="text-sm font-bold text-gray-900">{formatCurrency(product.sellingPrice)}</p>
         )}
         <span
-          className={`rounded-full px-2 py-0.5 text-xs font-medium ${status.className}`}
-          aria-label={`Status: ${status.label}`}
+          className={`rounded-full px-2.5 py-0.5 text-xs ${badge.className}`}
+          aria-label={`Status: ${badge.label}`}
         >
-          {status.label}
+          {badge.label}
         </span>
       </div>
     </div>

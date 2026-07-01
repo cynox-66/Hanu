@@ -1,29 +1,27 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../../../infrastructure/db/database';
 import { Product } from '../types';
-import { useProductUseCases } from './ProductContext';
 
+/**
+ * Returns all non-archived products as a live query.
+ * Auto-updates on any product mutation.
+ */
 export function useProducts() {
-  const { getProducts } = useProductUseCases();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const products = useLiveQuery<Product[]>(
+    () => db.products.where('status').notEqual('archived').toArray(),
+    [],
+  );
 
-  const fetchProducts = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await getProducts.execute();
-      setProducts(data);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch products'));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getProducts]);
+  const isLoading = products === undefined;
+  return { products: products ?? [], isLoading, error: null };
+}
 
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
+export function useActiveProducts() {
+  const products = useLiveQuery<Product[]>(
+    () => db.products.where('status').equals('active').toArray(),
+    [],
+  );
 
-  return { products, isLoading, error, refetch: fetchProducts };
+  const isLoading = products === undefined;
+  return { products: products ?? [], isLoading, error: null };
 }

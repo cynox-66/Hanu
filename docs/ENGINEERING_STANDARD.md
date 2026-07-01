@@ -262,3 +262,59 @@ The application uses a single, root-level `<AppErrorBoundary>` to catch unhandle
 - **No external libraries:** Error boundaries are implemented using raw React classes.
 - **No business logic:** The error boundary only provides a recovery UI (retry/return to dashboard). It does not log to external services or attempt to fix state.
 - **Global scope:** Placed outside the context providers in `main.tsx` to catch errors inside the providers as well as the routing tree.
+
+## 21. Inventory Architecture
+
+The Inventory module follows an immutable ledger pattern, rejecting the standard CRUD approach for stock management.
+
+### Immutable Ledger (Source of Truth)
+
+- Every stock change (in, out, adjustment) is recorded as an immutable `StockMovement`.
+- `StockMovement` records never change and are never deleted.
+- They snapshot the `productName` for historical accuracy.
+- The repository exposes exactly ONE write operation: `recordMovement()`.
+
+### Disposable Projections (Materialized Views)
+
+- `InventorySummary` represents the current stock state.
+- It is a **disposable projection**. It can always be rebuilt from the `StockMovement` ledger.
+- The Application layer never saves `InventorySummary` directly. The Infrastructure layer (Dexie transaction) automatically computes and saves the delta to the summary within the same atomic transaction as `recordMovement()`.
+
+### Valuation Strategy
+
+- **Weighted Average Cost (WAC)** is the architectural standard for inventory valuation.
+- When new stock arrives with a cost, the `totalCostValue` is increased.
+- While full WAC deduction on outbound stock is documented as the target, the current simplified implementation tracks total inbound cost value.
+
+### Available Stock vs Current Stock
+
+- `currentStock`: The absolute physical count of items in the warehouse.
+- `availableStock`: The count of items available for sale (`currentStock` minus reserved/pending orders).
+- In Sprint 1, `availableStock` equals `currentStock`. Future order integrations will deduct from `availableStock` at checkout and `currentStock` upon fulfillment.
+
+## 22. UI PRINCIPLE — Invisible Complexity
+
+Hanu may implement sophisticated architecture internally, but the user interface must expose only the minimum concepts necessary to complete a task.
+
+Engineering complexity belongs behind the interface.
+
+Users interact with business concepts, never technical concepts.
+
+Examples:
+
+✓ Add Stock
+✓ New Sale
+✓ Customer
+✓ Product
+✓ Reports
+
+Never expose:
+
+✗ Stock Movement
+✗ Ledger
+✗ Aggregate
+✗ Projection
+✗ Synchronization
+✗ Transaction
+✗ Inventory Summary
+✗ Domain

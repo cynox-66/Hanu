@@ -5,12 +5,11 @@ import { ProductCard } from './ProductCard';
 import {
   ProductListSkeleton,
   ProductListEmpty,
-  ProductListError,
   ProductListNoSearchResults,
 } from './ProductListStates';
 
 export const ProductList: React.FC = () => {
-  const { products, isLoading, error, refetch } = useProducts();
+  const { products, isLoading } = useProducts();
   const { archive, isArchiving } = useArchiveProduct();
   const { searchQuery, setSearchQuery, filteredProducts } = useProductSearch(products);
   const [productToArchive, setProductToArchive] = useState<{ id: string; name: string } | null>(
@@ -21,7 +20,7 @@ export const ProductList: React.FC = () => {
     if (!productToArchive) return;
     try {
       await archive(productToArchive.id);
-      await refetch();
+      // liveQuery automatically updates the list — no manual refetch needed
     } catch (err) {
       console.error('Failed to archive product:', err);
     } finally {
@@ -31,10 +30,6 @@ export const ProductList: React.FC = () => {
 
   if (isLoading) {
     return <ProductListSkeleton />;
-  }
-
-  if (error) {
-    return <ProductListError onRetry={refetch} />;
   }
 
   if (products.length === 0) {
@@ -98,7 +93,7 @@ export const ProductList: React.FC = () => {
           {filteredProducts.map((product) => (
             <li key={product.id}>
               <Link
-                to={`/products/${product.id}/edit`}
+                to={`/products/${product.id}`}
                 className="block focus:outline-none focus:ring-2 focus:ring-gray-900 rounded-2xl"
               >
                 <ProductCard

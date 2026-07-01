@@ -1,17 +1,17 @@
 import { Order } from '../types';
+import { normalizeText } from '../../../shared/utils/normalizeText';
 
 export class SearchOrders {
   execute(orders: Order[], query: string): Order[] {
-    if (!query || !query.trim()) {
+    const normalizedQuery = normalizeText(query);
+    if (!normalizedQuery) {
       return orders;
     }
 
-    const lowerQuery = query.toLowerCase().trim();
-
     return orders.filter((order) => {
-      const idMatch = order.id.toLowerCase().includes(lowerQuery);
-      const customerMatch = order.customerName.toLowerCase().includes(lowerQuery);
-      const statusMatch = order.status.toLowerCase().includes(lowerQuery);
+      const idMatch = normalizeText(order.id).includes(normalizedQuery);
+      const customerMatch = normalizeText(order.customerName).includes(normalizedQuery);
+      const statusMatch = normalizeText(order.status).includes(normalizedQuery);
 
       return idMatch || customerMatch || statusMatch;
     });

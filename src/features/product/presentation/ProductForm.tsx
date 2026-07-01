@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { CreateProductDTO, UpdateProductDTO, ProductStatus } from '../types';
+import { formatCurrency } from '../../../shared/utils/currency';
+import { validateProductPricing } from '../domain/ProductValidation';
 
 interface ProductFormProps {
   initialValues?: Partial<CreateProductDTO | UpdateProductDTO>;
@@ -18,7 +20,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   const [costPrice, setCostPrice] = useState(initialValues?.costPrice?.toString() || '');
   const [description, setDescription] = useState(initialValues?.description || '');
   const [notes, setNotes] = useState(initialValues?.notes || '');
-  const [status, setStatus] = useState<ProductStatus>(initialValues?.status || 'draft');
+  const [status] = useState<ProductStatus>(initialValues?.status || 'active');
+  const [lowStockThreshold, setLowStockThreshold] = useState(initialValues?.lowStockThreshold ?? 5);
 
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -27,13 +30,24 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     if (!name.trim()) {
       newErrors.name = 'Product name is required';
     }
-    if (!sellingPrice) {
-      newErrors.sellingPrice = 'Selling price is required';
-    } else if (isNaN(Number(sellingPrice)) || Number(sellingPrice) < 0) {
-      newErrors.sellingPrice = 'Must be a valid positive number';
+
+    try {
+      validateProductPricing(
+        sellingPrice ? Number(sellingPrice) : NaN,
+        costPrice ? Number(costPrice) : undefined,
+      );
+    } catch (err) {
+      if (err instanceof Error) {
+        if (err.message.includes('selling')) {
+          newErrors.sellingPrice = err.message;
+        } else if (err.message.includes('cost')) {
+          newErrors.costPrice = err.message;
+        }
+      }
     }
-    if (costPrice && (isNaN(Number(costPrice)) || Number(costPrice) < 0)) {
-      newErrors.costPrice = 'Must be a valid positive number';
+
+    if (!Number.isInteger(lowStockThreshold) || lowStockThreshold < 1 || lowStockThreshold > 100) {
+      newErrors.lowStockThreshold = 'Must be a whole number between 1 and 100';
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -50,6 +64,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         description: description.trim() || undefined,
         notes: notes.trim() || undefined,
         status,
+        lowStockThreshold,
         images: initialValues?.images || [],
       });
     }
@@ -98,7 +113,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         <div className="flex gap-4">
           <div className="flex-1">
             <label htmlFor="sellingPrice" className="block text-sm font-medium text-gray-700 mb-1">
-              Selling Price (₹) *
+              Selling Price *
             </label>
             <input
               id="sellingPrice"
@@ -109,13 +124,18 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               className={`block w-full rounded-xl border ${errors.sellingPrice ? 'border-red-500' : 'border-gray-300'} px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900`}
               placeholder="0.00"
             />
+            {sellingPrice && !errors.sellingPrice && (
+              <p className="mt-1 text-xs font-medium text-gray-500">
+                {formatCurrency(Number(sellingPrice))}
+              </p>
+            )}
             {errors.sellingPrice && (
               <p className="mt-1 text-sm text-red-500">{errors.sellingPrice}</p>
             )}
           </div>
           <div className="flex-1">
             <label htmlFor="costPrice" className="block text-sm font-medium text-gray-700 mb-1">
-              Cost Price (₹)
+              Cost Price
             </label>
             <input
               id="costPrice"
@@ -126,40 +146,105 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               className={`block w-full rounded-xl border ${errors.costPrice ? 'border-red-500' : 'border-gray-300'} px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900`}
               placeholder="0.00"
             />
+            {costPrice && !errors.costPrice && (
+              <p className="mt-1 text-xs font-medium text-gray-500">
+                {formatCurrency(Number(costPrice))}
+              </p>
+            )}
             {errors.costPrice && <p className="mt-1 text-sm text-red-500">{errors.costPrice}</p>}
           </div>
         </div>
 
-        {/* Category & Status */}
-        <div className="flex gap-4">
-          <div className="flex-1">
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
-              Category
-            </label>
-            <input
-              id="category"
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="block w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
-              placeholder="Optional"
-            />
+        {/* Smart Warnings */}
+        {!errors.sellingPrice &&
+          !errors.costPrice &&
+          Number(sellingPrice) > 0 &&
+          Number(costPrice) > 0 &&
+          Number(sellingPrice) < Number(costPrice) && (
+            <div className="rounded-xl bg-orange-50 border border-orange-100 p-3">
+              <p className="text-sm font-medium text-orange-800 flex items-center gap-2">
+                <span>⚠️</span> You&apos;ll lose money on every sale of this product.
+              </p>
+            </div>
+          )}
+        {!errors.sellingPrice &&
+          !errors.costPrice &&
+          Number(sellingPrice) > 0 &&
+          Number(costPrice) > 0 &&
+          Number(sellingPrice) === Number(costPrice) && (
+            <div className="rounded-xl bg-blue-50 border border-blue-100 p-3">
+              <p className="text-sm font-medium text-blue-800 flex items-center gap-2">
+                <span>ℹ️</span> This product will make no profit.
+              </p>
+            </div>
+          )}
+        {!errors.sellingPrice && Number(sellingPrice) > 1000000 && (
+          <div className="rounded-xl bg-yellow-50 border border-yellow-100 p-3">
+            <p className="text-sm font-medium text-yellow-800 flex items-center gap-2">
+              <span>👀</span> That price seems unusually high. Please double-check.
+            </p>
           </div>
-          <div className="flex-1">
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
-              Status
-            </label>
-            <select
-              id="status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value as ProductStatus)}
-              className="block w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900 bg-white"
+        )}
+
+        {/* Category */}
+        <div>
+          <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
+            Category
+          </label>
+          <input
+            id="category"
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="block w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-gray-900 focus:outline-none focus:ring-1 focus:ring-gray-900"
+            placeholder="Optional"
+          />
+        </div>
+
+        {/* Low Stock Alert */}
+        <div className="rounded-xl border border-gray-200 bg-gray-50/50 p-4">
+          <label className="block text-sm font-semibold text-gray-900 mb-1">Low Stock Alert</label>
+          <p className="text-xs text-gray-500 mb-3">
+            We will alert you when stock drops to or below this number.
+          </p>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setLowStockThreshold((q) => Math.max(1, q - 1))}
+              disabled={lowStockThreshold <= 1}
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-700 text-xl font-bold transition-colors active:bg-gray-100 disabled:opacity-40"
+              aria-label="Decrease low stock alert"
             >
-              <option value="draft">Draft</option>
-              <option value="active">Active</option>
-              {/* "archived" is intentionally absent: archiving must go through the Archive workflow */}
-            </select>
+              −
+            </button>
+            <input
+              type="number"
+              min={1}
+              max={100}
+              value={lowStockThreshold}
+              onChange={(e) => {
+                const v = parseInt(e.target.value, 10);
+                if (!isNaN(v)) {
+                  setLowStockThreshold(Math.min(100, Math.max(1, v)));
+                }
+              }}
+              className="w-20 rounded-xl border border-gray-300 py-2.5 text-center text-lg font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 bg-white"
+              id="low-stock-threshold-input"
+            />
+            <button
+              type="button"
+              onClick={() => setLowStockThreshold((q) => Math.min(100, q + 1))}
+              disabled={lowStockThreshold >= 100}
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-700 text-xl font-bold transition-colors active:bg-gray-100 disabled:opacity-40"
+              aria-label="Increase low stock alert"
+            >
+              +
+            </button>
+            <span className="text-sm text-gray-500 ml-1">units (default: 5)</span>
           </div>
+          {errors.lowStockThreshold && (
+            <p className="mt-1 text-xs text-red-600">{errors.lowStockThreshold}</p>
+          )}
         </div>
 
         {/* Description */}

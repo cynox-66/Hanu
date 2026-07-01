@@ -1,31 +1,17 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from '../../../infrastructure/db/database';
 import { Product } from '../types';
-import { useProductUseCases } from './ProductContext';
 
+/**
+ * Returns a single product by ID as a live query.
+ * Auto-updates when the product is edited.
+ */
 export function useProduct(id: string) {
-  const { getProductById } = useProductUseCases();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const product = useLiveQuery<Product | null>(
+    () => (id ? db.products.get(id).then((p) => p ?? null) : Promise.resolve(null)),
+    [id],
+  );
 
-  const fetchProduct = useCallback(async () => {
-    if (!id) return;
-
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await getProductById.execute(id);
-      setProduct(data);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to fetch product'));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getProductById, id]);
-
-  useEffect(() => {
-    fetchProduct();
-  }, [fetchProduct]);
-
-  return { product, isLoading, error, refetch: fetchProduct };
+  const isLoading = product === undefined;
+  return { product: product ?? null, isLoading, error: null };
 }
