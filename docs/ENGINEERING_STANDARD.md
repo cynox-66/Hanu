@@ -163,3 +163,93 @@ Before a module is marked completely finished (Sprint Freeze):
 - [ ] Production build (`npm run build`) completes with zero errors.
 - [ ] TypeScript (`tsc -b`) reports zero structural violations.
 - [ ] React runtime functions cleanly without hook dependency warnings or unhandled rejections.
+
+## 16. Historical Snapshots
+
+Orders record point-in-time snapshots of related entities at the moment of creation. These snapshots are **immutable** after the Order is saved.
+
+### Snapshotted Fields
+
+| Field          | Source Entity | Purpose                                              |
+| -------------- | ------------- | ---------------------------------------------------- |
+| `customerName` | Customer      | Preserves the customer's name at time of order        |
+| `productName`  | Product       | Preserves the product's name at time of order         |
+| `unitPrice`    | Product       | Preserves the selling price at time of order          |
+
+### Rules
+
+- **Snapshots are captured once during creation** via the `CreateOrderDTO` and `OrderItem` value objects.
+- **Snapshots are never updated**, even if the source entity (Customer or Product) changes after the order is created.
+- **The `updateOrder` Domain function explicitly preserves** `customerId`, `customerName`, `items`, and `totalAmount` from the existing Order, ignoring any values in the `UpdateOrderDTO` for those fields.
+- **The Edit Order UI enforces read-only rendering** of customer, items, prices, and totals. Only `status` and `notes` are editable.
+- **Historical correctness is a business invariant**, not a UI preference. Future modules (e.g., Invoices, Reports) depend on this guarantee.
+
+### Why This Matters
+
+If an Order referenced live Product prices or Customer names, then viewing a historical order would show **current** data instead of **what was actually sold**. This makes accounting unreliable and auditing impossible.
+
+## 17. Transaction Builder Pattern
+
+Orders are **not** standard CRUD entities. They are assembled as transactions through a multi-step workflow:
+
+```
+Select Customer → Add Products → Adjust Quantities → Review Total → Create Order
+```
+
+### Rules
+
+- The **Order Builder** (`OrderBuilder.tsx`) owns local React state for the in-progress transaction.
+- Products are added from the active catalog. When the same product is added again, the existing row's quantity is incremented — never duplicated.
+- The **live total** is computed via `useMemo()` inside the Builder. It is never stored in state, never calculated in JSX, and never passed to the Domain.
+- The final `CreateOrderDTO` is assembled from local state and passed to `useCreateOrder()`. The Domain Factory is solely responsible for generating `id`, `createdAt`, `updatedAt`, and `totalAmount`.
+- **Presentation never generates Domain values.** The Builder constructs a DTO; the Factory constructs the Entity.
+
+### Future Considerations
+
+Later sprints may introduce inventory deduction, discounts, taxes, or payment tracking. These belong in the Application or Domain layers — never in the Builder UI. The Transaction Builder pattern intentionally separates assembly (UI) from processing (Domain).
+
+## 18. Domain Ownership
+
+The Domain layer is the single owner of entity lifecycle invariants.
+
+### What the Domain Owns
+
+| Invariant       | Owner                           |
+| --------------- | ------------------------------- |
+| `id`            | `createOrderFromDTO()` Factory  |
+| `createdAt`     | `createOrderFromDTO()` Factory  |
+| `updatedAt`     | `updateOrder()` Factory         |
+| `totalAmount`   | `createOrderFromDTO()` Factory  |
+| Immutable fields| `updateOrder()` Factory         |
+
+### What React Must Never Do
+
+- Generate UUIDs
+- Generate timestamps
+- Calculate `totalAmount`
+- Mutate entities directly
+- Bypass the Domain Factory
+
+### Enforcement
+
+This is enforced structurally: the `CreateOrderDTO` type explicitly omits `id`, `createdAt`, `updatedAt`, and `totalAmount`. TypeScript prevents the Presentation layer from even passing these values.
+
+## 19. Search Standard
+
+All search functionality in Hanu follows a strict in-memory, offline-first pattern.
+
+### Properties
+
+- **Pure:** The `SearchOrders` use case is a stateless class with a synchronous `execute()` method.
+- **Stateless:** It does not store queries or results. It receives an array and a query string, and returns a filtered array.
+- **Memoized:** The React hook (`useOrderSearch`) wraps the use case in `useMemo()`, recomputing only when the source array or query string changes.
+- **In-memory:** Filtering operates on the already-fetched entity array. No IndexedDB queries are issued per keystroke.
+- **No repository dependency:** `SearchOrders` is instantiated directly inside the hook — it is not part of the DI/Context system because it has no infrastructure dependency.
+
+### Why Not Query IndexedDB?
+
+- IndexedDB queries are asynchronous and introduce latency on every keystroke.
+- Offline-first means the data is already loaded into memory.
+- In-memory filtering is instant and deterministic.
+- This pattern guarantees consistent search performance regardless of connectivity.
+
