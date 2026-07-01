@@ -1,11 +1,12 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AppShell } from './AppShell';
 import { DashboardPage } from './DashboardPage';
-import { OrdersPage, ReportsPage, SettingsPage } from './PlaceholderPages';
+import { ReportsPage, SettingsPage } from './PlaceholderPages';
 import { ProductListPage } from '../features/product/presentation/ProductListPage';
 import { CreateProductPage } from '../features/product/presentation/CreateProductPage';
 import { EditProductPage } from '../features/product/presentation/EditProductPage';
 import { CustomerListPage, CreateCustomerPage, EditCustomerPage } from '../features/customer';
+import { OrderListPage, CreateOrderPage, EditOrderPage } from '../features/order';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/orders',
-        element: <OrdersPage />,
+        element: <OrderListPage />,
       },
       {
         path: '/reports',
@@ -53,6 +54,14 @@ const router = createBrowserRouter([
   {
     path: '/customers/:id/edit',
     element: <EditCustomerPage />,
+  },
+  {
+    path: '/orders/new',
+    element: <CreateOrderPage />,
+  },
+  {
+    path: '/orders/:id/edit',
+    element: <EditOrderPage />,
   },
 ]);
 
